@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlaç Hatırlatıcı | Ana Sayfa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">MediHatırlat</div>
+        <ul>
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="project.html">Proje Detayları</a></li>
+            <li><a href="about.html">Hakkımızda</a></li>
+            <li><a href="contact.html">İletişim</a></li>
+        </ul>
+    </nav>
 
+    <main>
+        <section class="reminder-section">
+            <h1>İlaçlarınızı Unutmayın</h1>
+            <p>Yeni bir ilaç hatırlatıcısı ekleyin.</p>
+            
+            <form id="med-form">
+                <input type="text" id="med-name" placeholder="İlaç Adı (Örn: Parol)" required>
+                <input type="time" id="med-time" required>
+                <button type="submit">Hatırlatıcı Ekle</button>
+            </form>
+
+            <div class="med-list-container">
+                <h2>Bugünkü İlaçlarım</h2>
+                <ul id="med-list">
+                    </ul>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
