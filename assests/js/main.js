@@ -1,4 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // ==========================================
+    // 1. HAMBURGER MENÜ İŞLEMLERİ
+    // ==========================================
+    const hamburger = document.querySelector(".hamburger");
+    const navMenu = document.querySelector(".nav-menu");
+
+    // Hamburger ikonuna tıklandığında 'active' sınıfını ekle/çıkar
+    if (hamburger && navMenu) { // Eğer sayfalarda bu classlar varsa çalıştır (Hata almamak için)
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
+        });
+
+        // Menüdeki herhangi bir linke tıklandığında menüyü kapat
+        document.querySelectorAll(".nav-link").forEach(link => 
+            link.addEventListener("click", () => {
+                hamburger.classList.remove("active");
+                navMenu.classList.remove("active");
+            })
+        );
+    }
+
+    // ==========================================
+    // 2. İLAÇ HATIRLATICI İŞLEMLERİ
+    // ==========================================
     const medForm = document.getElementById('med-form');
     const medList = document.getElementById('med-list');
     const medNameInput = document.getElementById('med-name');
@@ -8,43 +34,44 @@ document.addEventListener('DOMContentLoaded', () => {
     let medications = [];
 
     // Form gönderildiğinde çalışacak fonksiyon
-    medForm.addEventListener('submit', function(e) {
-        e.preventDefault(); 
+    if (medForm) { // Sadece formun olduğu sayfalarda çalışması için kontrol
+        medForm.addEventListener('submit', function(e) {
+            e.preventDefault(); 
 
-        const medName = medNameInput.value;
-        const medTime = medTimeInput.value;
+            const medName = medNameInput.value;
+            const medTime = medTimeInput.value;
 
-        // İlacı takip listemize ekliyoruz (notified: false diyerek henüz uyarı vermediğimizi belirtiyoruz)
-        const newMed = {
-            name: medName,
-            time: medTime,
-            notified: false 
-        };
-        medications.push(newMed);
+            // İlacı takip listemize ekliyoruz (notified: false diyerek henüz uyarı vermediğimizi belirtiyoruz)
+            const newMed = {
+                name: medName,
+                time: medTime,
+                notified: false 
+            };
+            medications.push(newMed);
 
-        // Ekrana (HTML'e) liste elemanını ekleme
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <span><strong>${medName}</strong> - Saat: ${medTime}</span>
-            <button class="delete-btn">Sil</button>
-        `;
+            // Ekrana (HTML'e) liste elemanını ekleme
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span><strong>${medName}</strong> - Saat: ${medTime}</span>
+                <button class="delete-btn">Sil</button>
+            `;
 
-        // Silme butonuna tıklama olayı
-        li.querySelector('.delete-btn').addEventListener('click', function() {
-            li.remove(); // Ekrandan sil
-            // Arka plandaki takip listesinden de sil
-            medications = medications.filter(med => med !== newMed);
+            // Silme butonuna tıklama olayı
+            li.querySelector('.delete-btn').addEventListener('click', function() {
+                li.remove(); // Ekrandan sil
+                // Arka plandaki takip listesinden de sil
+                medications = medications.filter(med => med !== newMed);
+            });
+
+            medList.appendChild(li);
+
+            // Formu temizle
+            medNameInput.value = '';
+            medTimeInput.value = '';
         });
+    }
 
-        medList.appendChild(li);
-
-        // Formu temizle
-        medNameInput.value = '';
-        medTimeInput.value = '';
-    });
-
-    // --- YENİ: ZAMAN KONTROL SİSTEMİ ---
-    
+    // --- ZAMAN KONTROL SİSTEMİ ---
     // setInterval ile içerideki kodun her 1 saniyede bir (1000 milisaniye) çalışmasını sağlıyoruz
     setInterval(() => {
         // Şu anki bilgisayar saatini al
