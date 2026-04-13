@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // ==========================================
-    // 1. HAMBURGER MENÜ İŞLEMLERİ
+    // 1. HAMBURGER MENÜ İŞLEMLER
     // ==========================================
     const hamburger = document.querySelector(".hamburger");
     const navMenu = document.querySelector(".nav-menu");
