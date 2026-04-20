@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediHatırlat | Sağlığınız Kontrol Altında</title>
     <link rel="stylesheet" href="assests/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.150.1/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.150.1/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
     
     <header class="header">
-        <a href="index.html" class="logo"><i class="fa-solid fa-pills"></i> MediHatırlatcan</a>
+        <a href="index.html" class="logo"><i class="fa-solid fa-pills"></i> MediHatırlat</a>
         
         <nav class="navbar">
             <ul class="nav-menu">
@@ -41,7 +43,8 @@
                 <a href="#app-section" class="btn-primary">Hemen Hatırlatıcı Ekle</a>
             </div>
             <div class="hero-image">
-                </div>
+                <div id="canvas-container" style="width: 100%; height: 400px;"></div>
+            </div>
         </section>
 
         <section class="features-section">
@@ -85,8 +88,7 @@
                     <h2>Bugünkü İlaçlarım</h2>
                     <div class="med-list-container">
                         <ul id="med-list">
-                            <li class="med-item empty-state">Henüz eklenmiş bir ilaç yok.</li>
-                        </ul>
+                            </ul>
                     </div>
                 </div>
             </div>
