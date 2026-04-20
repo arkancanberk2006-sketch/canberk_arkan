@@ -31,13 +31,15 @@
         </div>
     </header>
 
-    <main>
-        <h1>Proje Hakkında</h1>
-        <p>Bu uygulama, kullanıcıların günlük ilaç kullanımlarını düzenli bir şekilde takip edebilmeleri için tasarlanmış etkileşimli bir web projesidir.</p>
-        <ul>
-            <li><strong>Teknolojiler:</strong> HTML5, CSS3, Vanilla JavaScript</li>
-            <li><strong>Özellikler:</strong> Dinamik liste oluşturma, form validasyonu.</li>
-        </ul>
+    <main class="page-container">
+        <div class="content-box">
+            <h1>Proje Hakkında</h1>
+            <p>Bu uygulama, kullanıcıların günlük ilaç kullanımlarını düzenli bir şekilde takip edebilmeleri için tasarlanmış etkileşimli bir web projesidir.</p>
+            <ul>
+                <li><strong>Teknolojiler:</strong> HTML5, CSS3, Vanilla JavaScript, Three.js</li>
+                <li><strong>Özellikler:</strong> Dinamik liste oluşturma, karanlık mod, 3D modelleme.</li>
+            </ul>
+        </div>
 
         <div class="pill-showcase">
             <h2>Etkileşimli İlaç Modeli</h2>
@@ -48,50 +50,72 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
+
     <script src="../assests/js/main.js"></script>
 
     <script>
-        const container = document.getElementById('canvas-container');
-        if (container) {
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById('canvas-container');
+            
+            // Konteyner bulunamazsa kodu durdur
+            if (!container) return;
+
+            // Genişlik ve yüksekliği CSS'ten veya varsayılan değerlerden al
+            const width = container.clientWidth || window.innerWidth * 0.8;
+            const height = 400; // CSS ile uyumlu yükseklik
+
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / 300, 0.1, 1000);
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            
+            // Arka planı şeffaf yapıyoruz ki CSS arka planı görünsün
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(container.clientWidth, 300);
+            renderer.setSize(width, height);
             container.appendChild(renderer.domElement);
 
-            // Hap (Kapsül) Oluşturma
-            const group = new THREE.Group();
-            const geometry = new THREE.CapsuleGeometry(1, 2, 10, 20);
-            const materialTop = new THREE.MeshPhongMaterial({ color: 0x3498db });
-            const materialBottom = new THREE.MeshPhongMaterial({ color: 0xffffff });
+            // Hapı oluştur (Mavi renkte parlak bir kapsül)
+            const geometry = new THREE.CapsuleGeometry(1.2, 2.5, 20, 30);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0x3498db, 
+                shininess: 100,
+                specular: 0x111111
+            });
+            const pill = new THREE.Mesh(geometry, material);
             
-            // İki renkli hap için yüzeyleri bölme
-            const pill = new THREE.Mesh(geometry, [materialTop, materialBottom]);
-            group.add(pill);
-            scene.add(group);
+            // Hapı başlangıçta biraz eğik dursun diye döndür
+            pill.rotation.z = Math.PI / 4;
+            scene.add(pill);
 
-            const light = new THREE.DirectionalLight(0xff0000, 1); // Not: Widget içinde renkler farklılaşabilir
-            const ambient = new THREE.AmbientLight(0xffffff, 0.7);
-            scene.add(ambient);
+            // Işıkları ekle (Bu kısmı yarım bırakmıştım!)
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
             
-            const sunLight = new THREE.PointLight(0xffffff, 1);
-            sunLight.position.set(5, 5, 5);
-            scene.add(sunLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
 
-            camera.position.z = 5;
+            // Kamerayı geri çek ki hap ekrana sığsın
+            camera.position.z = 7;
 
+            // Fare ile döndürme kontrollerini ekle
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
+            controls.enableDamping = true; // Dönüşe yumuşaklık katar
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = false; // Sayfada kaydırma yaparken hap büyümesin diye zoom'u kapattık
 
+            // Animasyon döngüsü (Sürekli ekranı günceller)
             function animate() {
                 requestAnimationFrame(animate);
-                group.rotation.y += 0.01;
+                
+                // Kendi etrafında yavaşça dönsün
+                pill.rotation.y += 0.005;
+                pill.rotation.x += 0.002;
+                
                 controls.update();
                 renderer.render(scene, camera);
             }
+            
             animate();
-        }
+        });
     </script>
 </body>
 </html>
