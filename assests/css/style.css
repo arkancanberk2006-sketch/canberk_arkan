@@ -50,5 +50,15 @@
         gap: 2rem;
         align-items: flex-start;
     }
+    .content-box {
+        flex: 1; /* Yazı alanı */
+        margin-bottom: 0;
+    }
+
+    .pill-showcase {
+        flex: 1; /* 3D görsel alanı */
+        margin-bottom: 0;
+    }
+}
 
    
