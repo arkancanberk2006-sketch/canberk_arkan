@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İlaç Hatırlatıcı | Proje</title>
-    <link rel="stylesheet" href="assests/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assests/css/style.css">
 </head>
 <body>
     <header class="header">
-        <a href="index.html" class="logo"><i class="fa-solid fa-pills"></i> MediHatırlat</a>
+        <a href="../index.html" class="logo"><i class="fa-solid fa-pills"></i> MediHatırlat</a>
         
         <nav class="navbar">
             <ul class="nav-menu">
-                <li class="nav-item"><a href="index.html" class="nav-link">Ana Sayfa</a></li>
-                <li class="nav-item"><a href="index.html#app-section" class="nav-link">Uygulama</a></li>
+                <li class="nav-item"><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
+                <li class="nav-item"><a href="../index.html#app-section" class="nav-link">Uygulama</a></li>
                 <li class="nav-item"><a href="project.html" class="nav-link active">Proje Detayları</a></li>
                 <li class="nav-item"><a href="about.html" class="nav-link">Hakkımızda</a></li>
             </ul>
@@ -44,10 +45,53 @@
             <div id="canvas-container"></div>
         </div>
     </main>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     
-    <script src="assests/js/main.js"></script>
-    
+    <script src="../assests/js/main.js"></script>
+
+    <script>
+        const container = document.getElementById('canvas-container');
+        if (container) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / 300, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, 300);
+            container.appendChild(renderer.domElement);
+
+            // Hap (Kapsül) Oluşturma
+            const group = new THREE.Group();
+            const geometry = new THREE.CapsuleGeometry(1, 2, 10, 20);
+            const materialTop = new THREE.MeshPhongMaterial({ color: 0x3498db });
+            const materialBottom = new THREE.MeshPhongMaterial({ color: 0xffffff });
+            
+            // İki renkli hap için yüzeyleri bölme
+            const pill = new THREE.Mesh(geometry, [materialTop, materialBottom]);
+            group.add(pill);
+            scene.add(group);
+
+            const light = new THREE.DirectionalLight(0xff0000, 1); // Not: Widget içinde renkler farklılaşabilir
+            const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambient);
+            
+            const sunLight = new THREE.PointLight(0xffffff, 1);
+            sunLight.position.set(5, 5, 5);
+            scene.add(sunLight);
+
+            camera.position.z = 5;
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                group.rotation.y += 0.01;
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+    </script>
 </body>
 </html>
