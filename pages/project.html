@@ -1,121 +1,64 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İlaç Hatırlatıcı | Proje</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assests/css/style.css">
-</head>
-<body>
-    <header class="header">
-        <a href="../index.html" class="logo"><i class="fa-solid fa-pills"></i> MediHatırlat</a>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.getElementById('canvas-container');
+        if (!container) return;
+
+        // Sahne Kurulumu
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / 400, 0.1, 1000);
         
-        <nav class="navbar">
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
-                <li class="nav-item"><a href="../index.html#app-section" class="nav-link">Uygulama</a></li>
-                <li class="nav-item"><a href="project.html" class="nav-link active">Proje Detayları</a></li>
-                <li class="nav-item"><a href="about.html" class="nav-link">Hakkımızda</a></li>
-            </ul>
-        </nav>
-        
-        <button id="dark-mode-toggle" class="theme-btn" title="Karanlık/Aydınlık Mod">
-            <i class="fa-solid fa-moon"></i>
-        </button>
-        
-        <div class="hamburger">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </div>
-    </header>
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, 400);
+        renderer.setPixelRatio(window.devicePixelRatio); // Net görüntü için
+        container.appendChild(renderer.domElement);
 
-    <main class="page-container">
-        <div class="content-box">
-            <h1>Proje Hakkında</h1>
-            <p>Bu uygulama, kullanıcıların günlük ilaç kullanımlarını düzenli bir şekilde takip edebilmeleri için tasarlanmış etkileşimli bir web projesidir.</p>
-            <ul>
-                <li><strong>Teknolojiler:</strong> HTML5, CSS3, Vanilla JavaScript, Three.js</li>
-                <li><strong>Özellikler:</strong> Dinamik liste oluşturma, karanlık mod, 3D modelleme.</li>
-            </ul>
-        </div>
-
-        <div class="pill-showcase">
-            <h2>Etkileşimli İlaç Modeli</h2>
-            <p>Hapı incelemek için fareyle (veya parmağınızla) tutup döndürün.</p>
-            <div id="canvas-container"></div>
-        </div>
-    </main>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
-    <script src="../assests/js/main.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const container = document.getElementById('canvas-container');
-            
-            // Konteyner bulunamazsa kodu durdur
-            if (!container) return;
-
-            // Genişlik ve yüksekliği CSS'ten veya varsayılan değerlerden al
-            const width = container.clientWidth || window.innerWidth * 0.8;
-            const height = 400; // CSS ile uyumlu yükseklik
-
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-            
-            // Arka planı şeffaf yapıyoruz ki CSS arka planı görünsün
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(width, height);
-            container.appendChild(renderer.domElement);
-
-            // Hapı oluştur (Mavi renkte parlak bir kapsül)
-            const geometry = new THREE.CapsuleGeometry(1.2, 2.5, 20, 30);
-            const material = new THREE.MeshPhongMaterial({ 
-                color: 0x3498db, 
-                shininess: 100,
-                specular: 0x111111
-            });
-            const pill = new THREE.Mesh(geometry, material);
-            
-            // Hapı başlangıçta biraz eğik dursun diye döndür
-            pill.rotation.z = Math.PI / 4;
-            scene.add(pill);
-
-            // Işıkları ekle (Bu kısmı yarım bırakmıştım!)
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-            
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(5, 5, 5);
-            scene.add(directionalLight);
-
-            // Kamerayı geri çek ki hap ekrana sığsın
-            camera.position.z = 7;
-
-            // Fare ile döndürme kontrollerini ekle
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true; // Dönüşe yumuşaklık katar
-            controls.dampingFactor = 0.05;
-            controls.enableZoom = false; // Sayfada kaydırma yaparken hap büyümesin diye zoom'u kapattık
-
-            // Animasyon döngüsü (Sürekli ekranı günceller)
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                // Kendi etrafında yavaşça dönsün
-                pill.rotation.y += 0.005;
-                pill.rotation.x += 0.002;
-                
-                controls.update();
-                renderer.render(scene, camera);
-            }
-            
-            animate();
+        // Hap Modeli (Artık r160 ile CapsuleGeometry çalışacaktır)
+        const geometry = new THREE.CapsuleGeometry(1.2, 2.5, 20, 30);
+        const material = new THREE.MeshPhongMaterial({ 
+            color: 0x3498db, 
+            shininess: 100,
+            specular: 0x444444
         });
-    </script>
-</body>
-</html>
+        const pill = new THREE.Mesh(geometry, material);
+        pill.rotation.z = Math.PI / 4;
+        scene.add(pill);
+
+        // Işıklandırma
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        camera.position.z = 7;
+
+        // Kontroller
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.enableZoom = false;
+
+        // Pencere Boyutu Değiştiğinde Güncelleme
+        window.addEventListener('resize', onWindowResize, false);
+
+        function onWindowResize() {
+            const newWidth = container.clientWidth;
+            camera.aspect = newWidth / 400;
+            camera.updateProjectionMatrix();
+            renderer.setSize(newWidth, 400);
+        }
+
+        // Animasyon
+        function animate() {
+            requestAnimationFrame(animate);
+            pill.rotation.y += 0.005;
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+    });
+</script>
