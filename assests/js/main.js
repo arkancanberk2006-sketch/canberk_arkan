@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // ==========================================
-    // 1. HAMBURGER MENÜ İŞLEMLERİ
-    // ==========================================
+    // 1. HAMBURGER MENÜ
     const hamburger = document.querySelector(".hamburger");
     const navMenu = document.querySelector(".nav-menu");
 
@@ -11,179 +9,127 @@ document.addEventListener('DOMContentLoaded', () => {
             hamburger.classList.toggle("active");
             navMenu.classList.toggle("active");
         });
-
-        document.querySelectorAll(".nav-link").forEach(link => 
-            link.addEventListener("click", () => {
-                hamburger.classList.remove("active");
-                navMenu.classList.remove("active");
-            })
-        );
     }
 
-    // ==========================================
-    // 2. İLAÇ HATIRLATICI İŞLEMLERİ
-    // ==========================================
+    // 2. İLAÇ HATIRLATICI (LOCALSTORAGE DESTEKLİ)
     const medForm = document.getElementById('med-form');
     const medList = document.getElementById('med-list');
-    const medNameInput = document.getElementById('med-name');
-    const medTimeInput = document.getElementById('med-time');
+    
+    // Kayıtlı ilaçları yükle
+    let medications = JSON.parse(localStorage.getItem('medications')) || [];
 
-    let medications = [];
+    function renderMeds() {
+        if (!medList) return;
+        medList.innerHTML = medications.length === 0 
+            ? '<li class="med-item empty-state">Henüz eklenmiş bir ilaç yok.</li>' 
+            : '';
 
-    if (medForm) { 
-        medForm.addEventListener('submit', function(e) {
-            e.preventDefault(); 
-
-            const medName = medNameInput.value;
-            const medTime = medTimeInput.value;
-
-            const newMed = {
-                name: medName,
-                time: medTime,
-                notified: false 
-            };
-            medications.push(newMed);
-
+        medications.forEach((med, index) => {
             const li = document.createElement('li');
+            li.className = 'med-item';
             li.innerHTML = `
-                <span><strong>${medName}</strong> - Saat: ${medTime}</span>
-                <button class="delete-btn">Sil</button>
+                <span><strong>${med.name}</strong> - Saat: ${med.time}</span>
+                <button class="delete-btn" onclick="deleteMed(${index})">Sil</button>
             `;
-
-            li.querySelector('.delete-btn').addEventListener('click', function() {
-                li.remove(); 
-                medications = medications.filter(med => med !== newMed);
-            });
-
             medList.appendChild(li);
-
-            medNameInput.value = '';
-            medTimeInput.value = '';
         });
     }
 
-    // --- ZAMAN KONTROL SİSTEMİ ---
+    window.deleteMed = (index) => {
+        medications.splice(index, 1);
+        localStorage.setItem('medications', JSON.stringify(medications));
+        renderMeds();
+    };
+
+    if (medForm) {
+        medForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newMed = {
+                name: document.getElementById('med-name').value,
+                time: document.getElementById('med-time').value,
+                notified: false
+            };
+            medications.push(newMed);
+            localStorage.setItem('medications', JSON.stringify(medications));
+            renderMeds();
+            medForm.reset();
+        });
+    }
+    renderMeds();
+
+    // Zaman Kontrolü
     setInterval(() => {
         const now = new Date();
-        const currentHours = now.getHours().toString().padStart(2, '0');
-        const currentMinutes = now.getMinutes().toString().padStart(2, '0');
-        const currentTime = `${currentHours}:${currentMinutes}`;
+        const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
         medications.forEach(med => {
             if (med.time === currentTime && !med.notified) {
-                alert(`⏰ HATIRLATMA: ${med.name} ilacınızı içme vaktiniz geldi!`);
-                med.notified = true; 
+                alert(`⏰ HATIRLATMA: ${med.name} vaktiniz geldi!`);
+                med.notified = true;
+                localStorage.setItem('medications', JSON.stringify(medications));
             }
+            // Dakika geçince bildirimi bir sonraki döngü için sıfırla
+            if (med.time !== currentTime) { med.notified = false; }
         });
-    }, 1000); 
+    }, 1000);
 
-    // ==========================================
-    // 3. KARANLIK MOD (DARK MODE) İŞLEMLERİ
-    // ==========================================
+    // 3. DARK MODE
     const darkModeToggle = document.getElementById('dark-mode-toggle');
-    const body = document.body;
-
-    // 1. Kullanıcının önceki tercihini LocalStorage'dan al
-    const currentTheme = localStorage.getItem('theme');
-    
-    // Eğer önceden karanlık modu seçmişse, sayfaya uygula ve ikonu Güneş yap
-    if (currentTheme === 'dark') {
-        body.classList.add('dark-mode');
-        if (darkModeToggle) {
+    if (darkModeToggle) {
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
             darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
         }
-    }
 
-    // 2. Butona Tıklama Olayı
-    if (darkModeToggle) {
         darkModeToggle.addEventListener('click', () => {
-            // Body etiketine dark-mode sınıfını ekle veya çıkar (toggle)
-            body.classList.toggle('dark-mode');
-            
-            // Eğer sınıf eklendiyse (Karanlık Mod aktifse)
-            if (body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark'); // Hafızaya kaydet
-                darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>'; // İkonu Güneş'e çevir
-            } 
-            // Eğer sınıf çıkarıldıysa (Aydınlık Mod aktifse)
-            else {
-                localStorage.setItem('theme', 'light'); // Hafızaya kaydet
-                darkModeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>'; // İkonu Ay'a çevir
-            }
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            darkModeToggle.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
         });
     }
-// ==========================================
-    // 4. ETKİLEŞİMLİ 3D HAP MODELİ İŞLEMLERİ
-    // ==========================================
-    const container = document.getElementById('canvas-container');
 
-    // Eğer sayfada 'canvas-container' varsa (Yani project.html sayfasındaysak) bu kodları çalıştır
+    // 4. 3D MODEL SİSTEMİ
+    const container = document.getElementById('canvas-container');
     if (container && typeof THREE !== 'undefined') {
-        
-        // 1. Sahne (Scene), Kamera (Camera) ve İşleyici (Renderer) Kurulumu
         const scene = new THREE.Scene();
-        
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
 
-        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-        camera.position.z = 10;
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.z = 5;
 
-        // 2. Işıklandırma
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); 
-        scene.add(ambientLight);
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(1, 1, 2);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5), light);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8); 
-        directionalLight.position.set(5, 10, 7);
-        scene.add(directionalLight);
-
-        // 3. Hap (Kapsül) Modelini Oluşturma
-        const pillGroup = new THREE.Group();
-
-        // Mavi Üst Kısım
-        const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x3498db, roughness: 0.3, metalness: 0.1 }); 
-        const topCylinder = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 1.5, 32), blueMaterial);
-        topCylinder.position.y = 0.75;
-        const topSphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), blueMaterial);
-        topSphere.position.y = 1.5; 
-
-        // Beyaz Alt Kısım
-        const whiteMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3, metalness: 0.1 });
-        const bottomCylinder = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 1.5, 32), whiteMaterial);
-        bottomCylinder.position.y = -0.75;
-        const bottomSphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), whiteMaterial);
-        bottomSphere.position.y = -1.5; 
-
-        pillGroup.add(topCylinder, topSphere, bottomCylinder, bottomSphere);
+        const pill = new THREE.Group();
+        const geometry = new THREE.CapsuleGeometry(0.8, 1.5, 10, 20);
+        const matTop = new THREE.MeshStandardMaterial({ color: 0x3498db });
+        const matBottom = new THREE.MeshStandardMaterial({ color: 0xffffff });
         
-        pillGroup.rotation.z = Math.PI / 4; 
-        pillGroup.rotation.x = Math.PI / 6;
-        scene.add(pillGroup);
+        // Basit bir hap görünümü için iki parça
+        const meshTop = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2), matTop);
+        const meshMid = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 1), matTop);
+        const meshBot = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), matBottom);
+        
+        meshTop.position.y = 0.5;
+        meshBot.position.y = -0.5;
+        pill.add(meshTop, meshMid, meshBot);
+        scene.add(pill);
 
-        // 4. Fare ile Döndürme Kontrolleri
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; 
-        controls.dampingFactor = 0.05;
-        controls.enableZoom = false; 
-        controls.autoRotate = true; 
-        controls.autoRotateSpeed = 2.0;
+        if (THREE.OrbitControls) {
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableZoom = false;
+        }
 
-        // 5. Animasyon Döngüsü
         function animate() {
             requestAnimationFrame(animate);
-            controls.update(); 
+            pill.rotation.y += 0.01;
+            pill.rotation.x += 0.005;
             renderer.render(scene, camera);
         }
         animate();
-
-        // 6. Ekran Boyutu Değiştiğinde Kamerayı Güncelle
-        window.addEventListener('resize', () => {
-            if(container.clientWidth > 0) {
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            }
-        });
     }
 });
