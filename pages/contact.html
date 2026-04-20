@@ -1,38 +1,95 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İlaç Hatırlatıcı | İletişim</title>
-   <link rel="stylesheet" href="../assests/css/style.css">
+    <title>MediHatırlat | İletişim</title>
+    
+    <link rel="stylesheet" href="../assests/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.150.1/three.min.js"></script>
-    <script src="https://unpkg.com/three@0.150.1/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
-    <nav>
-        <div class="logo">MediHatırlat</div>
-        <ul>
-            <li><a href="index.html">Ana Sayfa</a></li>
-            <li><a href="project.html">Proje Detayları</a></li>
-            <li><a href="about.html">Hakkımızda</a></li>
-            <li><a href="contact.html">İletişim</a></li>
-        </ul>
-    </nav>
 
-    <main>
-        <h1>Bize Ulaşın</h1>
-
-        <form class="contact-form">
-            <input type="text" placeholder="Adınız" required>
-            <input type="email" placeholder="E-posta Adresiniz" required>
-            <textarea placeholder="Mesajınız..." rows="5" required></textarea>
+    <header class="header">
+        <a href="../index.html" class="logo"><i class="fa-solid fa-pills"></i> MediHatırlat</a>
         
-            <button type="submit">Gönder</button>
-            <h2> Canberk size en iyi hayat için burda</h2>
-        </form>
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
+                <li class="nav-item"><a href="project.html" class="nav-link">Proje Detayları</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">Hakkımızda</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link active">İletişim</a></li>
+            </ul>
+        </nav>
+        
+        <button id="dark-mode-toggle" class="theme-btn" title="Karanlık/Aydınlık Mod">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+        
+        <div class="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </header>
+
+    <main class="contact-page" style="padding: 120px 5% 50px; max-width: 1000px; margin: 0 auto;">
+        
+        <section class="contact-header" style="text-align: center; margin-bottom: 50px;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Bize Ulaşın</h1>
+            <p style="color: #666;">Sorularınız veya geri bildirimleriniz için aşağıdaki formu kullanabilirsiniz.</p>
+        </section>
+
+        <div class="contact-wrapper" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; align-items: start;">
+            
+            <div class="contact-info" style="padding: 30px; background: rgba(52, 152, 219, 0.05); border-radius: 15px;">
+                <h3 style="margin-bottom: 20px; color: #3498db;">İletişim Bilgileri</h3>
+                
+                <div style="margin-bottom: 20px;">
+                    <i class="fa-solid fa-user-tie" style="color: #3498db; margin-right: 10px;"></i>
+                    <span><strong>Geliştirici:</strong> Canberk Arkan</span>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <i class="fa-solid fa-envelope" style="color: #3498db; margin-right: 10px;"></i>
+                    <span>info@medihatirlat.com</span>
+                </div>
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+                    <p style="font-style: italic; color: #555;">"Canberk size en iyi hayat için burada."</p>
+                </div>
+            </div>
+
+            <form class="contact-form" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="input-group" style="display: flex; flex-direction: column; gap: 5px;">
+                    <label>Adınız Soyadınız</label>
+                    <input type="text" placeholder="Adınızı girin" required style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+                </div>
+
+                <div class="input-group" style="display: flex; flex-direction: column; gap: 5px;">
+                    <label>E-posta Adresiniz</label>
+                    <input type="email" placeholder="E-posta adresinizi girin" required style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+                </div>
+
+                <div class="input-group" style="display: flex; flex-direction: column; gap: 5px;">
+                    <label>Mesajınız</label>
+                    <textarea placeholder="Size nasıl yardımcı olabiliriz?" rows="5" required style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; resize: vertical;"></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit" style="background: #3498db; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s;">
+                    Mesajı Gönder <i class="fa-solid fa-paper-plane" style="margin-left: 8px;"></i>
+                </button>
+            </form>
+        </div>
+
     </main>
+
+    <footer class="footer" style="text-align: center; padding: 30px; margin-top: 50px; border-top: 1px solid #eee;">
+        <p>&copy; 2026 MediHatırlat | Canberk Arkan</p>
+    </footer>
+
+    <script src="../assests/js/main.js"></script>
 </body>
 </html>
