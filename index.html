@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İlaç Hatırlatıcı | Ana Sayfa</title>
+    <title>MediHatırlat | Sağlığınız Kontrol Altında</title>
     <link rel="stylesheet" href="assests/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.150.1/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.150.1/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
     
     <header class="header">
-        <a href="index.html" class="logo">MediHatırlatıcı</a>
+        <a href="index.html" class="logo"><i class="fa-solid fa-pills"></i> MediHatırlat</a>
         
         <nav class="navbar">
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="index.html" class="nav-link">Ana Sayfa</a></li>
-                <li class="nav-item"><a href="project.html" class="nav-link">Proje Detayları</a></li>
-                <li class="nav-item"><a href="about.html" class="nav-link">Hakkımızda</a></li>
-                <li class="nav-item"><a href="contact.html" class="nav-link">İletişim</a></li>
-            </ul>
-        </nav>
+    <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link active">Ana Sayfa</a></li>
+        <li class="nav-item"><a href="#app-section" class="nav-link">Uygulama</a></li>
+        <li class="nav-item"><a href="pages/contact.html" class="nav-link">İletişim Detayları</a></li>
+        <li class="nav-item"><a href="pages/project.html" class="nav-link">Proje Detayları</a></li>
+        <li class="nav-item"><a href="pages/about.html" class="nav-link">Hakkımızda</a></li>
+    </ul>
+</nav>
+        
+        <button id="dark-mode-toggle" class="theme-btn" title="Karanlık/Aydınlık Mod">
+            <i class="fa-solid fa-moon"></i>
+        </button>
         
         <div class="hamburger">
             <span class="bar"></span>
@@ -28,23 +37,68 @@
     </header>
 
     <main>
-        <section class="reminder-section">
-            <h1>İlaçlarınızı Unutmayın</h1>
-            <p>Yeni bir ilaç hatırlatıcısı ekleyin.</p>
-            
-            <form id="med-form">
-                <input type="text" id="med-name" placeholder="İlaç Adı (Örn: Parol)" required>
-                <input type="time" id="med-time" required>
-                <button type="submit">Hatırlatıcı Ekle</button>
-            </form>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Sağlığınızı Şansa Bırakmayın</h1>
+                <p>İlaç saatlerinizi takip etmek artık çok kolay. MediHatırlat ile tedaviniz hep zamanında, hep düzenli.</p>
+                <a href="#app-section" class="btn-primary">Hemen Hatırlatıcı Ekle</a>
+            </div>
+            <div class="hero-image">
+                <div id="canvas-container" style="width: 100%; height: 400px;"></div>
+            </div>
+        </section>
 
-            <div class="med-list-container">
-                <h2>Bugünkü İlaçlarım</h2>
-                <ul id="med-list">
-                    </ul>
+        <section class="features-section">
+            <div class="feature-card">
+                <i class="fa-solid fa-clock"></i>
+                <h3>Zamanında Uyarı</h3>
+                <p>İlaç saatiniz geldiğinde anında bildirim alın.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-shield-heart"></i>
+                <h3>Güvenilir Takip</h3>
+                <p>Hangi ilacı, ne zaman aldığınızı kolayca listeleyin.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <h3>Kolay Kullanım</h3>
+                <p>Karmaşık menüler olmadan, tek tıkla işlemlerinizi halledin.</p>
+            </div>
+        </section>
+
+        <section id="app-section" class="reminder-section">
+            <div class="app-container">
+                <div class="form-side">
+                    <h2>Yeni İlaç Ekle</h2>
+                    <p>Takip etmek istediğiniz ilacın bilgilerini girin.</p>
+                    
+                    <form id="med-form">
+                        <div class="input-group">
+                            <label for="med-name">İlaç Adı</label>
+                            <input type="text" id="med-name" placeholder="Örn: Parol, Aspirin" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="med-time">Kullanım Saati</label>
+                            <input type="time" id="med-time" required>
+                        </div>
+                        <button type="submit" class="btn-submit">Listeye Ekle <i class="fa-solid fa-plus"></i></button>
+                    </form>
+                </div>
+
+                <div class="list-side">
+                    <h2>Bugünkü İlaçlarım</h2>
+                    <div class="med-list-container">
+                        <ul id="med-list">
+                            </ul>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 MediHatırlat. Tüm hakları saklıdır.</p>
+    </footer>
 
     <script src="assests/js/main.js"></script>
 </body>

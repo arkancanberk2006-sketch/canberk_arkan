@@ -3,27 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İlaç Hatırlatıcı | Proje</title>
-    <link rel="stylesheet" href="style.css">
+    <title>MediHatırlat | Proje Detayları</title>
+
+    <link rel="stylesheet" href="../assests/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <nav>
-        <div class="logo">MediHatırlat</div>
-        <ul>
-            <li><a href="index.html">Ana Sayfa</a></li>
-            <li><a href="project.html">Proje Detayları</a></li>
-            <li><a href="about.html">Hakkımızda</a></li>
-            <li><a href="contact.html">İletişim</a></li>
-        </ul>
-    </nav>
 
-    <main>
-        <h1>Proje Hakkında</h1>
-        <p>Bu uygulama, kullanıcıların günlük ilaç kullanımlarını düzenli bir şekilde takip edebilmeleri için tasarlanmış etkileşimli bir web projesidir.</p>
-        <ul>
-            <li><strong>Teknolojiler:</strong> HTML5, CSS3, Vanilla JavaScript</li>
-            <li><strong>Özellikler:</strong> Dinamik liste oluşturma, form validasyonu.</li>
-        </ul>
+    <header class="header">
+        <a href="../index.html" class="logo"><i class="fa-solid fa-pills"></i> MediHatırlat</a>
+        
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
+                <li class="nav-item"><a href="../index.html#app-section" class="nav-link">Uygulama</a></li>
+                <li class="nav-item"><a href="project.html" class="nav-link active">Proje Detayları</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">Hakkımızda</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">İletişim</a></li>
+            </ul>
+        </nav>
+        
+        <button id="dark-mode-toggle" class="theme-btn" title="Karanlık/Aydınlık Mod">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+        
+        <div class="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </header>
+
+    <main class="project-page" style="padding: 120px 5% 50px; max-width: 1200px; margin: 0 auto;">
+        
+        <section class="project-header" style="text-align: center; margin-bottom: 60px;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Proje Detayları</h1>
+            <p style="font-size: 1.1rem; color: #666; max-width: 800px; margin: 0 auto;">
+                Bu uygulama, kullanıcıların günlük ilaç kullanımlarını düzenli bir şekilde takip edebilmeleri için tasarlanmış modern ve etkileşimli bir web projesidir.
+            </p>
+        </section>
+
+        <div class="project-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start;">
+            
+            <section class="tech-info">
+                <h2 style="color: #3498db; margin-bottom: 25px;"><i class="fa-solid fa-code"></i> Teknik Yapı</h2>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 15px; padding: 15px; background: rgba(52, 152, 219, 0.1); border-radius: 10px; border-left: 5px solid #3498db;">
+                        <strong><i class="fa-brands fa-html5"></i> HTML5:</strong> Semantik yapı ve kullanıcı dostu form tasarımı.
+                    </li>
+                    <li style="margin-bottom: 15px; padding: 15px; background: rgba(52, 152, 219, 0.1); border-radius: 10px; border-left: 5px solid #3498db;">
+                        <strong><i class="fa-brands fa-css3-alt"></i> CSS3:</strong> Responsive (mobil uyumlu) tasarım ve Dark Mode desteği.
+                    </li>
+                    <li style="margin-bottom: 15px; padding: 15px; background: rgba(52, 152, 219, 0.1); border-radius: 10px; border-left: 5px solid #3498db;">
+                        <strong><i class="fa-brands fa-js"></i> Vanilla JavaScript:</strong> Dinamik hatırlatıcı sistemi ve LocalStorage ile veri saklama.
+                    </li>
+                    <li style="margin-bottom: 15px; padding: 15px; background: rgba(52, 152, 219, 0.1); border-radius: 10px; border-left: 5px solid #3498db;">
+                        <strong><i class="fa-solid fa-cube"></i> Three.js:</strong> WebGL tabanlı interaktif 3D hap modeli.
+                    </li>
+                </ul>
+            </section>
+
+            <section class="pill-showcase" style="background: rgba(0,0,0,0.02); padding: 30px; border-radius: 20px; border: 1px dashed #3498db; text-align: center;">
+                <h2 style="margin-bottom: 15px;"><i class="fa-solid fa-vr-cardboard"></i> Etkileşimli Model</h2>
+                <p style="font-size: 0.9rem; margin-bottom: 20px; color: #555;">Hapı incelemek için fareyle veya parmağınızla çevirin.</p>
+                <div id="canvas-container" style="width: 100%; height: 350px; cursor: grab;"></div>
+            </section>
+        </div>
+
     </main>
+
+    <footer class="footer" style="text-align: center; padding: 40px; margin-top: 50px; border-top: 1px solid #eee;">
+        <p>&copy; 2026 MediHatırlat | Geliştirici: Canberk Arkan</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.145.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="../assests/js/main.js"></script>
+
 </body>
 </html>

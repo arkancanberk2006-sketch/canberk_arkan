@@ -1,98 +1,135 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // ==========================================
-    // 1. HAMBURGER MENÜ İŞLEMLER
-    // ==========================================
+    // 1. HAMBURGER MENÜ
     const hamburger = document.querySelector(".hamburger");
     const navMenu = document.querySelector(".nav-menu");
 
-    // Hamburger ikonuna tıklandığında 'active' sınıfını ekle/çıkar
-    if (hamburger && navMenu) { // Eğer sayfalarda bu classlar varsa çalıştır (Hata almamak için)
+    if (hamburger && navMenu) { 
         hamburger.addEventListener("click", () => {
             hamburger.classList.toggle("active");
             navMenu.classList.toggle("active");
         });
-
-        // Menüdeki herhangi bir linke tıklandığında menüyü kapat
-        document.querySelectorAll(".nav-link").forEach(link => 
-            link.addEventListener("click", () => {
-                hamburger.classList.remove("active");
-                navMenu.classList.remove("active");
-            })
-        );
     }
 
-    // ==========================================
-    // 2. İLAÇ HATIRLATICI İŞLEMLERİ
-    // ==========================================
+    // 2. İLAÇ HATIRLATICI (LOCALSTORAGE DESTEKLİ)
     const medForm = document.getElementById('med-form');
     const medList = document.getElementById('med-list');
-    const medNameInput = document.getElementById('med-name');
-    const medTimeInput = document.getElementById('med-time');
+    
+    // Kayıtlı ilaçları yükle
+    let medications = JSON.parse(localStorage.getItem('medications')) || [];
 
-    // İlaçları arka planda takip edebilmek için bir liste (dizi) oluşturuyoruz
-    let medications = [];
+    function renderMeds() {
+        if (!medList) return;
+        medList.innerHTML = medications.length === 0 
+            ? '<li class="med-item empty-state">Henüz eklenmiş bir ilaç yok.</li>' 
+            : '';
 
-    // Form gönderildiğinde çalışacak fonksiyon
-    if (medForm) { // Sadece formun olduğu sayfalarda çalışması için kontrol
-        medForm.addEventListener('submit', function(e) {
-            e.preventDefault(); 
-
-            const medName = medNameInput.value;
-            const medTime = medTimeInput.value;
-
-            // İlacı takip listemize ekliyoruz (notified: false diyerek henüz uyarı vermediğimizi belirtiyoruz)
-            const newMed = {
-                name: medName,
-                time: medTime,
-                notified: false 
-            };
-            medications.push(newMed);
-
-            // Ekrana (HTML'e) liste elemanını ekleme
+        medications.forEach((med, index) => {
             const li = document.createElement('li');
+            li.className = 'med-item';
             li.innerHTML = `
-                <span><strong>${medName}</strong> - Saat: ${medTime}</span>
-                <button class="delete-btn">Sil</button>
+                <span><strong>${med.name}</strong> - Saat: ${med.time}</span>
+                <button class="delete-btn" onclick="deleteMed(${index})">Sil</button>
             `;
-
-            // Silme butonuna tıklama olayı
-            li.querySelector('.delete-btn').addEventListener('click', function() {
-                li.remove(); // Ekrandan sil
-                // Arka plandaki takip listesinden de sil
-                medications = medications.filter(med => med !== newMed);
-            });
-
             medList.appendChild(li);
-
-            // Formu temizle
-            medNameInput.value = '';
-            medTimeInput.value = '';
         });
     }
 
-    // --- ZAMAN KONTROL SİSTEMİ ---
-    // setInterval ile içerideki kodun her 1 saniyede bir (1000 milisaniye) çalışmasını sağlıyoruz
-    setInterval(() => {
-        // Şu anki bilgisayar saatini al
-        const now = new Date();
-        
-        // Saati ve dakikayı alıp (Örn: 09:05) formattına getiriyoruz ki formdaki saatle eşleşsin
-        const currentHours = now.getHours().toString().padStart(2, '0');
-        const currentMinutes = now.getMinutes().toString().padStart(2, '0');
-        const currentTime = `${currentHours}:${currentMinutes}`;
+    window.deleteMed = (index) => {
+        medications.splice(index, 1);
+        localStorage.setItem('medications', JSON.stringify(medications));
+        renderMeds();
+    };
 
-        // Takip listemizdeki tüm ilaçları tek tek kontrol et
-        medications.forEach(med => {
-            // Eğer şimdiki saat, ilacın saatine eşitse VE henüz uyarı vermediysek
-            if (med.time === currentTime && !med.notified) {
-                
-                // Ekrana uyarı mesajı çıkar
-                alert(`⏰ HATIRLATMA: ${med.name} ilacınızı içme vaktiniz geldi!`);
-                
-                // Uyarıyı verdiğimizi işaretliyoruz ki aynı dakika içinde 60 defa uyarı vermesin
-                med.notified = true; 
-            }
+    if (medForm) {
+        medForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newMed = {
+                name: document.getElementById('med-name').value,
+                time: document.getElementById('med-time').value,
+                notified: false
+            };
+            medications.push(newMed);
+            localStorage.setItem('medications', JSON.stringify(medications));
+            renderMeds();
+            medForm.reset();
         });
-    }, 1000); // 1000 ms = 1 saniye
+    }
+    renderMeds();
+
+    // Zaman Kontrolü
+    setInterval(() => {
+        const now = new Date();
+        const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+        medications.forEach(med => {
+            if (med.time === currentTime && !med.notified) {
+                alert(`⏰ HATIRLATMA: ${med.name} vaktiniz geldi!`);
+                med.notified = true;
+                localStorage.setItem('medications', JSON.stringify(medications));
+            }
+            // Dakika geçince bildirimi bir sonraki döngü için sıfırla
+            if (med.time !== currentTime) { med.notified = false; }
+        });
+    }, 1000);
+
+    // 3. DARK MODE
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    if (darkModeToggle) {
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            darkModeToggle.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        });
+    }
+
+    // 4. 3D MODEL SİSTEMİ
+    const container = document.getElementById('canvas-container');
+    if (container && typeof THREE !== 'undefined') {
+        const scene = new THREE.Scene();
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(1, 1, 2);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5), light);
+
+        const pill = new THREE.Group();
+        const geometry = new THREE.CapsuleGeometry(0.8, 1.5, 10, 20);
+        const matTop = new THREE.MeshStandardMaterial({ color: 0x3498db });
+        const matBottom = new THREE.MeshStandardMaterial({ color: 0xffffff });
+        
+        // Basit bir hap görünümü için iki parça
+        const meshTop = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2), matTop);
+        const meshMid = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 1), matTop);
+        const meshBot = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), matBottom);
+        
+        meshTop.position.y = 0.5;
+        meshBot.position.y = -0.5;
+        pill.add(meshTop, meshMid, meshBot);
+        scene.add(pill);
+
+        if (THREE.OrbitControls) {
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableZoom = false;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            pill.rotation.y += 0.01;
+            pill.rotation.x += 0.005;
+            renderer.render(scene, camera);
+        }
+        animate();
+    }
 });
