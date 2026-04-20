@@ -10,7 +10,7 @@
 body {
     background-color: #f4f7f6;
     color: #333;
-    background-image: url('foto.jpg'); /* Görsel dosyanızın adı */
+   background-image: url('../foto.jpg');; /* Görsel dosyanızın adı */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
