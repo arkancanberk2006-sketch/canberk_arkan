@@ -1,60 +1,74 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+</script>
 
-<script>
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
     document.addEventListener("DOMContentLoaded", function() {
         const container = document.getElementById('canvas-container');
         if (!container) return;
 
-        // Sahne Kurulumu
+        // Sahne Ayarları
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, container.clientWidth / 400, 0.1, 1000);
         
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(container.clientWidth, 400);
-        renderer.setPixelRatio(window.devicePixelRatio); // Net görüntü için
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
-        // Hap Modeli (Artık r160 ile CapsuleGeometry çalışacaktır)
-        const geometry = new THREE.CapsuleGeometry(1.2, 2.5, 20, 30);
-        const material = new THREE.MeshPhongMaterial({ 
-            color: 0x3498db, 
-            shininess: 100,
-            specular: 0x444444
-        });
-        const pill = new THREE.Mesh(geometry, material);
-        pill.rotation.z = Math.PI / 4;
-        scene.add(pill);
+        // --- ÇİFT RENKLİ HAP OLUŞTURMA ---
+        const group = new THREE.Group(); // İki parçayı bir arada tutmak için
+
+        // 1. Parça (Mavi Üst)
+        const geometry1 = new THREE.CapsuleGeometry(1.2, 1.25, 20, 30);
+        const material1 = new THREE.MeshPhongMaterial({ color: 0x3498db, shininess: 100 });
+        const pillTop = new THREE.Mesh(geometry1, material1);
+        pillTop.position.y = 0.625; // Yukarı kaydır
+        group.add(pillTop);
+
+        // 2. Parça (Beyaz Alt)
+        const geometry2 = new THREE.CapsuleGeometry(1.2, 1.25, 20, 30);
+        const material2 = new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 100 });
+        const pillBottom = new THREE.Mesh(geometry2, material2);
+        pillBottom.position.y = -0.625; // Aşağı kaydır
+        group.add(pillBottom);
+
+        group.rotation.z = Math.PI / 4;
+        scene.add(group);
 
         // Işıklandırma
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         scene.add(ambientLight);
         
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-        directionalLight.position.set(5, 5, 5);
-        scene.add(directionalLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
 
-        camera.position.z = 7;
+        camera.position.z = 6;
 
         // Kontroller
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.enableZoom = false;
 
-        // Pencere Boyutu Değiştiğinde Güncelleme
-        window.addEventListener('resize', onWindowResize, false);
-
-        function onWindowResize() {
-            const newWidth = container.clientWidth;
-            camera.aspect = newWidth / 400;
+        // Boyutlandırma
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / 400;
             camera.updateProjectionMatrix();
-            renderer.setSize(newWidth, 400);
-        }
+            renderer.setSize(container.clientWidth, 400);
+        });
 
-        // Animasyon
         function animate() {
             requestAnimationFrame(animate);
-            pill.rotation.y += 0.005;
+            group.rotation.y += 0.005; // Hapı döndür
             controls.update();
             renderer.render(scene, camera);
         }
