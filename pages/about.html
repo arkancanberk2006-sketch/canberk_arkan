@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediHatırlat | Hakkımızda</title>
     
-   <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.150.1/three.min.js"></script>
 </head>
 <body>
 
@@ -20,10 +18,11 @@
                 <li class="nav-item"><a href="../index.html" class="nav-link">Ana Sayfa</a></li>
                 <li class="nav-item"><a href="project.html" class="nav-link">Proje Detayları</a></li>
                 <li class="nav-item"><a href="about.html" class="nav-link active">Hakkımızda</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">İletişim</a></li>
             </ul>
         </nav>
 
-        <button id="dark-mode-toggle" class="theme-btn">
+        <button id="dark-mode-toggle" class="theme-btn" title="Karanlık/Aydınlık Mod">
             <i class="fa-solid fa-moon"></i>
         </button>
 
@@ -34,7 +33,7 @@
         </div>
     </header>
 
-    <main class="about-container" style="padding: 100px 5%; max-width: 1200px; margin: 0 auto;">
+    <main class="about-container" style="padding: 120px 5% 50px; max-width: 1200px; margin: 0 auto;">
         <section class="about-hero" style="text-align: center; margin-bottom: 50px;">
             <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Hakkımızda</h1>
             <div style="width: 80px; height: 5px; background: #3498db; margin: 0 auto 30px;"></div>
@@ -57,10 +56,12 @@
         </section>
     </main>
 
-    <footer class="footer" style="text-align: center; padding: 20px; margin-top: 50px; border-top: 1px solid #ddd;">
+    <footer class="footer" style="text-align: center; padding: 30px; margin-top: 50px; border-top: 1px solid #eee;">
         <p>&copy; 2026 MediHatırlat | Geliştirici: Canberk Arkan</p>
     </footer>
 
-  <script src="../assets/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.145.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>
