@@ -1,4 +1,6 @@
-# yeni etkileşimli
+# Hap ve Zaman tasarufu 
+# artık daha gelişmiş 
 # web_portfolio_template
 # web projesi yönetimi dersi
 # bu uygulama ile hasta kişiler ilaçlarını unutmadan karıştırmadan hatırlayacak ve aksatmayacak
+
