@@ -22,18 +22,18 @@ body {
    ÜST MENÜ VE HAMBURGER (HEADER & NAVBAR)
 ========================================= */
 .header {
-    background-color: rgba(44, 62, 80, 0.95); /* Menüyü biraz şeffaf yaptık */
+    background-color: rgba(44, 62, 80, 0.95); 
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 5%;
-    position: sticky; /* Menü aşağı kaydırırken üstte kalsın */
+    position: sticky; 
     top: 0;
     z-index: 1000;
 }
 
 .logo {
-    color: #3498db; /* Logoyu maviye çevirdik, ikonla uyumlu */
+    color: #3498db; 
     text-decoration: none;
     font-size: 1.5rem;
     font-weight: bold;
@@ -78,7 +78,6 @@ body {
 ========================================= */
 main {
     width: 100%;
-    /* Eski 800px kısıtlamasını kaldırdık ki Hero bölümü genişleyebilsin */
 }
 
 h1, h2, h3 {
@@ -91,7 +90,7 @@ h1, h2, h3 {
 .hero-section {
     text-align: center;
     padding: 6rem 20px;
-    background: rgba(44, 62, 80, 0.7); /* Arka plan resminin üstüne koyu cam efekti */
+    background: rgba(44, 62, 80, 0.7); 
     color: white;
     margin-bottom: 2rem;
 }
@@ -185,7 +184,7 @@ h1, h2, h3 {
     display: inline-block;
 }
 
-/* Form Elemanları */
+/* Form Elemanları (Textarea eklendi) */
 #med-form {
     display: flex;
     flex-direction: column;
@@ -204,7 +203,7 @@ h1, h2, h3 {
     color: #2c3e50;
 }
 
-input {
+input, textarea {
     padding: 0.8rem;
     border: 1px solid #ccc;
     border-radius: 6px;
@@ -212,7 +211,7 @@ input {
     transition: border-color 0.3s;
 }
 
-input:focus {
+input:focus, textarea:focus {
     outline: none;
     border-color: #3498db;
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
@@ -281,7 +280,7 @@ input:focus {
     background-color: #c0392b;
 }
 
-/* Scrollbar Tasarımı (Liste içi kaydırma için) */
+/* Scrollbar Tasarımı */
 #med-list::-webkit-scrollbar {
     width: 6px;
 }
@@ -308,6 +307,82 @@ input:focus {
 }
 
 /* =========================================
+   ALT SAYFALAR (Proje, Hakkımızda vb.)
+========================================= */
+.page-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+.content-box, .pill-showcase {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    margin-bottom: 2rem;
+}
+
+.pill-showcase {
+    text-align: center;
+}
+
+#canvas-container {
+    width: 100%;
+    height: 400px; 
+    margin-top: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: grab;
+}
+
+#canvas-container:active {
+    cursor: grabbing;
+}
+
+/* =========================================
+   İLETİŞİM SAYFASI (27 NİSAN ÖDEVİ)
+========================================= */
+.contact-page {
+    padding: 60px 20px 50px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.contact-header p {
+    color: #666;
+}
+
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.contact-info {
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.95); /* Arka planı site temasına uydurduk */
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.contact-form {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* =========================================
    MOBİL UYUMLULUK (MEDIA QUERIES)
 ========================================= */
 @media (max-width: 768px) {
@@ -320,7 +395,7 @@ input:focus {
     .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
     .nav-menu {
-        position: absolute; /* Fixed yerine absolute daha iyi olabilir */
+        position: absolute; 
         left: -100%;
         top: 70px;
         flex-direction: column;
@@ -343,49 +418,52 @@ input:focus {
         font-size: 2rem;
     }
 
-    /* Özellikler ve Uygulama Kısımları Mobilde Alt Alta Gelsin */
     .features-section, .app-container {
         flex-direction: column;
         gap: 1.5rem;
         padding: 1.5rem;
+    }
+    
+    /* Mobilde İletişim Formunu Alt Alta Al */
+    .contact-wrapper {
+        grid-template-columns: 1fr;
     }
 }
 
 /* =========================================
    KARANLIK MOD (DARK MODE) TASARIMI
 ========================================= */
-/* Butonun Görünümü */
 .theme-btn {
     background: transparent;
     border: none;
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
-    margin-right: 15px; /* Mobilde hamburger ile çakışmasın diye */
+    margin-right: 15px; 
     transition: transform 0.3s;
 }
 
 .theme-btn:hover {
     transform: scale(1.1);
-    color: #f1c40f; /* Ay/Güneş üzerine gelince sarı olsun */
+    color: #f1c40f; 
 }
 
-/* Karanlık Mod Aktif Olduğunda Değişecek Yerler */
 body.dark-mode {
-    background-color: #1a1a2e; /* Koyu arka plan */
-    color: #e0e0e0; /* Açık gri yazılar */
-    /* Eğer arka plan resmini karanlıkta gizlemek istersen şu satırı açabilirsin: */
-    /* background-image: none; */
+    background-color: #1a1a2e; 
+    color: #e0e0e0; 
 }
 
-/* Karanlık Modda Kartlar ve Formlar */
 body.dark-mode main {
     background: rgba(30, 30, 40, 0.9);
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
 body.dark-mode .app-container,
-body.dark-mode .feature-card {
+body.dark-mode .feature-card,
+body.dark-mode .content-box,
+body.dark-mode .pill-showcase,
+body.dark-mode .contact-info, /* İletişim Bilgileri Kutusu Dark Mode */
+body.dark-mode .contact-form  /* İletişim Formu Kutusu Dark Mode */ {
     background: rgba(40, 40, 50, 0.95);
     color: #e0e0e0;
 }
@@ -393,11 +471,13 @@ body.dark-mode .feature-card {
 body.dark-mode h1, 
 body.dark-mode h2, 
 body.dark-mode h3, 
-body.dark-mode .input-group label {
-    color: #3498db; /* Başlıklar karanlıkta açık mavi daha iyi durur */
+body.dark-mode .input-group label,
+body.dark-mode .contact-header p {
+    color: #3498db; 
 }
 
-body.dark-mode input {
+/* Textarea da karanlık moda dahil edildi */
+body.dark-mode input, body.dark-mode textarea {
     background-color: #2c3e50;
     color: white;
     border: 1px solid #455a64;
@@ -407,38 +487,4 @@ body.dark-mode #med-list li {
     background: #2c3e50;
     color: #ecf0f1;
     border-left-color: #e74c3c;
-}
-/* =========================================
-   ALT SAYFALAR (Proje, Hakkımızda vb.) İÇİN KUTULAR VE 3D MODEL
-========================================= */
-.page-container {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 0 20px;
-}
-
-.content-box, .pill-showcase {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    margin-bottom: 2rem;
-}
-
-.pill-showcase {
-    text-align: center;
-}
-
-/* 3D Tuval (Canvas) Boyutlandırması - GÖRÜNMESİ İÇİN ŞART! */
-#canvas-container {
-    width: 100%;
-    height: 400px; /* Tuval yüksekliği buradan ayarlanıyor */
-    margin-top: 1.5rem;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: grab;
-}
-
-#canvas-container:active {
-    cursor: grabbing;
 }
