@@ -132,4 +132,76 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         animate();
     }
+
+    // 5. İLETİŞİM FORMU KONTROLÜ (27 NİSAN GÖREVİ)
+    const form = document.getElementById('iletisimFormu');
+
+    if(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+
+            const adSoyad = document.getElementById('adSoyad');
+            const eposta = document.getElementById('eposta');
+            const mesaj = document.getElementById('mesaj');
+            const formMesaj = document.getElementById('formMesaj');
+
+            const adHata = document.getElementById('adHata');
+            const epostaHata = document.getElementById('epostaHata');
+            const mesajHata = document.getElementById('mesajHata');
+
+            let formGecerliMi = true;
+
+            // Hataları sıfırla
+            adHata.style.display = 'none';
+            epostaHata.style.display = 'none';
+            mesajHata.style.display = 'none';
+            adSoyad.style.borderColor = '#ddd';
+            eposta.style.borderColor = '#ddd';
+            mesaj.style.borderColor = '#ddd';
+            formMesaj.style.display = 'none';
+
+            // Ad Soyad Kontrolü
+            if (adSoyad.value.trim() === '') {
+                adHata.style.display = 'block';
+                adSoyad.style.borderColor = '#e74c3c';
+                formGecerliMi = false;
+            }
+
+            // E-posta Kontrolü
+            const epostaFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+            if (eposta.value.trim() === '') {
+                epostaHata.textContent = 'Lütfen e-posta adresinizi boş bırakmayın.';
+                epostaHata.style.display = 'block';
+                eposta.style.borderColor = '#e74c3c';
+                formGecerliMi = false;
+            } else if (!epostaFormat.test(eposta.value.trim())) {
+                epostaHata.textContent = 'Geçersiz format! Örn: ornek@mail.com';
+                epostaHata.style.display = 'block';
+                eposta.style.borderColor = '#e74c3c';
+                formGecerliMi = false;
+            }
+
+            // Mesaj Kontrolü
+            if (mesaj.value.trim() === '') {
+                mesajHata.style.display = 'block';
+                mesaj.style.borderColor = '#e74c3c';
+                formGecerliMi = false;
+            }
+
+            // Başarılı Gönderim
+            if (formGecerliMi) {
+                formMesaj.textContent = 'İşlem Başarılı! Mesajınız bize ulaştı.';
+                formMesaj.style.display = 'block';
+                formMesaj.style.backgroundColor = '#d4edda';
+                formMesaj.style.color = '#155724';
+                formMesaj.style.border = '1px solid #c3e6cb';
+
+                form.reset();
+
+                setTimeout(() => {
+                    formMesaj.style.display = 'none';
+                }, 5000);
+            }
+        });
+    }
 });
