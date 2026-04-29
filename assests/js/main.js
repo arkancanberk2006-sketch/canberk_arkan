@@ -119,6 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (THREE.OrbitControls) {
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableZoom = false;
+            // EKLENEN KISIM: Kameranın hedefini tam merkeze (0,0,0) odaklıyoruz
+            controls.target.set(0, 0, 0);
+            controls.update();
         }
 
         function animate() {
