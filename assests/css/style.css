@@ -488,3 +488,22 @@ body.dark-mode #med-list li {
     color: #ecf0f1;
     border-left-color: #e74c3c;
 }
+/* 4 Mayıs Görevi İçin Grid Stilleri */
+.recommendations-section {
+    padding: 4rem 10%;
+    background-color: #f9f9f9;
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+.dark-mode .recommendations-section {
+    background-color: #1a1a2e;
+}
+.favorite-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
