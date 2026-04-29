@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 med.notified = true;
                 localStorage.setItem('medications', JSON.stringify(medications));
             }
-            // Dakika geçince bildirimi bir sonraki döngü için sıfırla
             if (med.time !== currentTime) { med.notified = false; }
         });
     }, 1000);
@@ -105,11 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
         scene.add(new THREE.AmbientLight(0xffffff, 0.5), light);
 
         const pill = new THREE.Group();
-        const geometry = new THREE.CapsuleGeometry(0.8, 1.5, 10, 20);
         const matTop = new THREE.MeshStandardMaterial({ color: 0x3498db });
         const matBottom = new THREE.MeshStandardMaterial({ color: 0xffffff });
         
-        // Basit bir hap görünümü için iki parça
         const meshTop = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2), matTop);
         const meshMid = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 1), matTop);
         const meshBot = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), matBottom);
@@ -139,19 +136,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if(form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault(); 
-
             const adSoyad = document.getElementById('adSoyad');
             const eposta = document.getElementById('eposta');
             const mesaj = document.getElementById('mesaj');
             const formMesaj = document.getElementById('formMesaj');
-
             const adHata = document.getElementById('adHata');
             const epostaHata = document.getElementById('epostaHata');
             const mesajHata = document.getElementById('mesajHata');
-
             let formGecerliMi = true;
 
-            // Hataları sıfırla
             adHata.style.display = 'none';
             epostaHata.style.display = 'none';
             mesajHata.style.display = 'none';
@@ -160,14 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
             mesaj.style.borderColor = '#ddd';
             formMesaj.style.display = 'none';
 
-            // Ad Soyad Kontrolü
             if (adSoyad.value.trim() === '') {
                 adHata.style.display = 'block';
                 adSoyad.style.borderColor = '#e74c3c';
                 formGecerliMi = false;
             }
 
-            // E-posta Kontrolü
             const epostaFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
             if (eposta.value.trim() === '') {
                 epostaHata.textContent = 'Lütfen e-posta adresinizi boş bırakmayın.';
@@ -181,27 +172,93 @@ document.addEventListener('DOMContentLoaded', () => {
                 formGecerliMi = false;
             }
 
-            // Mesaj Kontrolü
             if (mesaj.value.trim() === '') {
                 mesajHata.style.display = 'block';
                 mesaj.style.borderColor = '#e74c3c';
                 formGecerliMi = false;
             }
 
-            // Başarılı Gönderim
             if (formGecerliMi) {
                 formMesaj.textContent = 'İşlem Başarılı! Mesajınız bize ulaştı.';
                 formMesaj.style.display = 'block';
                 formMesaj.style.backgroundColor = '#d4edda';
                 formMesaj.style.color = '#155724';
                 formMesaj.style.border = '1px solid #c3e6cb';
-
                 form.reset();
-
                 setTimeout(() => {
                     formMesaj.style.display = 'none';
                 }, 5000);
             }
         });
+    }
+
+    // 6. 4 MAYIS GÖREVİ: JSON VERİ ÇEKME VE FAVORİLERE EKLEME
+    const productContainer = document.getElementById('product-container');
+    const favoriteList = document.getElementById('favorite-list');
+
+    if (productContainer && favoriteList) {
+        let favorites = JSON.parse(localStorage.getItem('favoriteMeds')) || [];
+
+        function renderFavorites() {
+            favoriteList.innerHTML = favorites.length === 0 
+                ? '<li class="med-item empty-state">Henüz favori eklenmedi.</li>' 
+                : '';
+            
+            favorites.forEach((fav, index) => {
+                const li = document.createElement('li');
+                li.className = 'med-item';
+                li.innerHTML = `
+                    <span><strong>${fav.isim}</strong> - ${fav.kategori} (${fav.fiyat})</span>
+                    <button class="delete-btn" onclick="removeFavorite(${index})">Kaldır</button>
+                `;
+                favoriteList.appendChild(li);
+            });
+        }
+
+        window.removeFavorite = (index) => {
+            favorites.splice(index, 1);
+            localStorage.setItem('favoriteMeds', JSON.stringify(favorites));
+            renderFavorites();
+        };
+
+        // DİKKAT: Fetch yolu dosya yapına göre ayarlandı
+        fetch('assests/js/data.json')
+            .then(response => {
+                if (!response.ok) throw new Error('Veri çekilemedi!');
+                return response.json();
+            })
+            .then(data => {
+                data.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'feature-card product-card';
+                    card.innerHTML = `
+                        <i class="fa-solid fa-capsules" style="font-size: 2rem; color: #3498db; margin-bottom: 15px;"></i>
+                        <h3>${product.isim}</h3>
+                        <p>${product.kategori}</p>
+                        <p><strong>${product.fiyat}</strong></p>
+                        <button class="btn-primary btn-fav" style="margin-top: 15px; padding: 10px; width: 100%; border:none; cursor:pointer;">
+                            <i class="fa-solid fa-heart"></i> Favorilere Ekle
+                        </button>
+                    `;
+                    
+                    const favBtn = card.querySelector('.btn-fav');
+                    favBtn.addEventListener('click', () => {
+                        const isExist = favorites.some(fav => fav.id === product.id);
+                        if (!isExist) {
+                            favorites.push(product);
+                            localStorage.setItem('favoriteMeds', JSON.stringify(favorites));
+                            renderFavorites();
+                            alert(`${product.isim} favorilere eklendi!`);
+                        } else {
+                            alert('Bu ürün zaten favorilerinizde!');
+                        }
+                    });
+
+                    productContainer.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Fetch Hatası:', error));
+
+        renderFavorites();
     }
 });
