@@ -10,11 +10,7 @@
 body {
     background-color: #f4f7f6;
     color: #333;
-    background-image: url('foto.jpg'); /* Görsel dosyanızın adı */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    /* Fotoğraf kullanımı kaldırıldı */
     line-height: 1.6;
 }
 
@@ -90,7 +86,7 @@ h1, h2, h3 {
 .hero-section {
     text-align: center;
     padding: 6rem 20px;
-    background: rgba(44, 62, 80, 0.7); 
+    background: #2c3e50; /* Transparanlık yerine düz renk kullanıldı */
     color: white;
     margin-bottom: 2rem;
 }
@@ -136,7 +132,7 @@ h1, h2, h3 {
 }
 
 .feature-card {
-    background: rgba(255, 255, 255, 0.9);
+    background: white; /* Transparanlık kaldırıldı */
     padding: 2rem;
     border-radius: 8px;
     text-align: center;
@@ -167,7 +163,7 @@ h1, h2, h3 {
 .app-container {
     display: flex;
     gap: 3rem;
-    background: rgba(255, 255, 255, 0.95);
+    background: white; /* Transparanlık kaldırıldı */
     padding: 3rem;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -316,7 +312,7 @@ input:focus, textarea:focus {
 }
 
 .content-box, .pill-showcase {
-    background: rgba(255, 255, 255, 0.95);
+    background: white; /* Transparanlık kaldırıldı */
     padding: 2.5rem;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -367,13 +363,13 @@ input:focus, textarea:focus {
 
 .contact-info {
     padding: 30px;
-    background: rgba(255, 255, 255, 0.95); /* Arka planı site temasına uydurduk */
+    background: white; /* Transparanlık kaldırıldı */
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
 .contact-form {
-    background: rgba(255, 255, 255, 0.95);
+    background: white; /* Transparanlık kaldırıldı */
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -454,7 +450,7 @@ body.dark-mode {
 }
 
 body.dark-mode main {
-    background: rgba(30, 30, 40, 0.9);
+    background: #1e1e28; /* Transparanlık kaldırıldı */
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
@@ -462,9 +458,9 @@ body.dark-mode .app-container,
 body.dark-mode .feature-card,
 body.dark-mode .content-box,
 body.dark-mode .pill-showcase,
-body.dark-mode .contact-info, /* İletişim Bilgileri Kutusu Dark Mode */
-body.dark-mode .contact-form  /* İletişim Formu Kutusu Dark Mode */ {
-    background: rgba(40, 40, 50, 0.95);
+body.dark-mode .contact-info, 
+body.dark-mode .contact-form  {
+    background: #282832; /* Transparanlık kaldırıldı */
     color: #e0e0e0;
 }
 
@@ -474,6 +470,13 @@ body.dark-mode h3,
 body.dark-mode .input-group label,
 body.dark-mode .contact-header p {
     color: #3498db; 
+}
+
+/* KARANLIK MODDA KAYBOLAN YAZILAR İÇİN DÜZELTME */
+body.dark-mode p, 
+body.dark-mode span, 
+body.dark-mode div:not(.btn-primary):not(.delete-btn):not(.nav-menu) {
+    color: #e0e0e0;
 }
 
 /* Textarea da karanlık moda dahil edildi */
@@ -507,6 +510,7 @@ body.dark-mode #med-list li {
     padding: 0;
     margin: 0;
 }
+
 /* Günün İpucu Stilleri */
 .tip-section {
     padding: 2rem 10%;
