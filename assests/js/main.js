@@ -88,21 +88,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. 3D MODEL SİSTEMİ
+   // 4. 3D MODEL SİSTEMİ
     const container = document.getElementById('canvas-container');
     if (container && typeof THREE !== 'undefined') {
         const scene = new THREE.Scene();
+        
+        // Alpha: true ile arka planı şeffaf yapıyoruz, antialias: true ile kenarları yumuşatıyoruz
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Mobil cihazlarda netlik ayarı
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
 
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
         camera.position.z = 5;
 
+        // Işıklandırma
         const light = new THREE.DirectionalLight(0xffffff, 1);
         light.position.set(1, 1, 2);
         scene.add(new THREE.AmbientLight(0xffffff, 0.5), light);
 
+        // Hap Modeli Oluşturma
         const pill = new THREE.Group();
         const matTop = new THREE.MeshStandardMaterial({ color: 0x3498db });
         const matBottom = new THREE.MeshStandardMaterial({ color: 0xffffff });
@@ -116,18 +121,36 @@ document.addEventListener('DOMContentLoaded', () => {
         pill.add(meshTop, meshMid, meshBot);
         scene.add(pill);
 
+        // Kontroller
+        let controls;
         if (THREE.OrbitControls) {
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableZoom = false;
-            // EKLENEN KISIM: Kameranın hedefini tam merkeze (0,0,0) odaklıyoruz
             controls.target.set(0, 0, 0);
             controls.update();
         }
 
+        // === KRİTİK: MOBİL VE EKRAN BOYUTU GÜNCELLEME FONKSİYONU ===
+        function onWindowResize() {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            // Kamera oranını ve render boyutunu yeni ölçülere göre güncelle
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        }
+
+        // Pencere boyutu değiştiğinde (veya telefon yan çevrildiğinde) çalıştır
+        window.addEventListener('resize', onWindowResize);
+
+        // Animasyon Döngüsü
         function animate() {
             requestAnimationFrame(animate);
             pill.rotation.y += 0.01;
             pill.rotation.x += 0.005;
+            
+            if (controls) controls.update();
             renderer.render(scene, camera);
         }
         animate();
