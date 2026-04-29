@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "isim": "C Vitamini 1000mg",
+    "kategori": "Bağışıklık Takviyesi",
+    "fiyat": "120 TL"
+  },
+  {
+    "id": 2,
+    "isim": "Omega 3 Balık Yağı",
+    "kategori": "Kalp & Damar Sağlığı",
+    "fiyat": "250 TL"
+  },
+  {
+    "id": 3,
+    "isim": "D3 + K2 Vitamini",
+    "kategori": "Kemik Sağlığı",
+    "fiyat": "180 TL"
+  },
+  {
+    "id": 4,
+    "isim": "Magnezyum Sitrat",
+    "kategori": "Kas & Sinir Sistemi",
+    "fiyat": "210 TL"
+  }
+]
