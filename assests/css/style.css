@@ -561,3 +561,10 @@ body.dark-mode #med-list li {
     from { filter: drop-shadow(0 0 2px #fff); }
     to { filter: drop-shadow(0 0 10px #f1c40f); }
 }
+/* Karanlık mod aktifken yazıları beyaz yap */
+.dark-mode h1, 
+.dark-mode h2, 
+.dark-mode h3, 
+.dark-mode p {
+    color: #ffffff;
+}
