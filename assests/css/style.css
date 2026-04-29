@@ -330,10 +330,17 @@ input:focus, textarea:focus {
     border-radius: 8px;
     overflow: hidden;
     cursor: grab;
+    touch-action: none; /* Mobilde dokunma çakışmasını engeller */
 }
 
 #canvas-container:active {
     cursor: grabbing;
+}
+
+/* EKLENEN KISIM: Direkt canvas elementine de etki etmesi için */
+#canvas-container canvas {
+    touch-action: none;
+    outline: none; /* Tıkladığında etrafında çıkan çizgiyi gizler */
 }
 
 /* =========================================
