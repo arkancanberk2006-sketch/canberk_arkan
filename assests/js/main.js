@@ -261,4 +261,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderFavorites();
     }
+
+    // 7. GÜNÜN İPUCU SİSTEMİ
+    const tips = [
+        "İlaçlarınızı her gün aynı saatte alarak etkinliğini artırabilirsiniz.",
+        "Bol su içmek, vücudunuzun ilaçları daha iyi işlemesine yardımcı olur.",
+        "İlaçlarınızı doğrudan güneş ışığı almayan, serin ve kuru bir yerde saklayın.",
+        "Doktorunuza danışmadan ilaç dozunuzu asla değiştirmeyin.",
+        "Günde en az 7-8 saat uyumak bağışıklık sisteminizi güçlendirir.",
+        "Düzenli yürüyüş yapmak kalp sağlığınızı korumanıza yardımcı olur.",
+        "Meyve ve sebze ağırlıklı beslenmek doğal vitamin kaynağıdır."
+    ];
+
+    const tipElement = document.getElementById('daily-tip');
+    if (tipElement) {
+        // Rastgele bir ipucu seç
+        const randomIndex = Math.floor(Math.random() * tips.length);
+        tipElement.textContent = tips[randomIndex];
+    }
+    
 });
