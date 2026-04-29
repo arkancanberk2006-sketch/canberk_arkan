@@ -431,6 +431,21 @@ input:focus, textarea:focus {
     .contact-wrapper {
         grid-template-columns: 1fr;
     }
+
+    /* --- HAP MODELİNİN MERKEZDE KALMASI İÇİN MOBİL DÜZELTMESİ --- */
+    /* Resim konteynerini telefonda merkezle */
+    .hero-image {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center; /* Kanvas gibi blok içeriklerini merkezler */
+    }
+    /* Kanvas konteynerini stacked/dikey görünüm için ayarla */
+    #canvas-container {
+        width: 90% !important; /* Yanlarda boşluk bırakmak için biraz daha daralt */
+        margin: 1.5rem auto !important; /* Dikey kenar boşluklarını koruyarak yatayda merkezle */
+        height: 300px !important; /* Telefonda biraz daha kısa yap */
+    }
+    /* ------------------------------------------------------------- */
 }
 
 /* =========================================
@@ -571,11 +586,4 @@ body.dark-mode #med-list li {
 @keyframes glow {
     from { filter: drop-shadow(0 0 2px #fff); }
     to { filter: drop-shadow(0 0 10px #f1c40f); }
-}
-/* Karanlık mod aktifken yazıları beyaz yap */
-.dark-mode h1, 
-.dark-mode h2, 
-.dark-mode h3, 
-.dark-mode p {
-    color: #ffffff;
 }
