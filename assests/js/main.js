@@ -93,21 +93,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (container && typeof THREE !== 'undefined') {
         const scene = new THREE.Scene();
         
-        // Alpha: true ile arka planı şeffaf yapıyoruz, antialias: true ile kenarları yumuşatıyoruz
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Mobil cihazlarda netlik ayarı
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
 
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
         camera.position.z = 5;
 
-        // Işıklandırma
         const light = new THREE.DirectionalLight(0xffffff, 1);
         light.position.set(1, 1, 2);
         scene.add(new THREE.AmbientLight(0xffffff, 0.5), light);
 
-        // Hap Modeli Oluşturma
         const pill = new THREE.Group();
         const matTop = new THREE.MeshStandardMaterial({ color: 0x3498db });
         const matBottom = new THREE.MeshStandardMaterial({ color: 0xffffff });
@@ -121,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
         pill.add(meshTop, meshMid, meshBot);
         scene.add(pill);
 
-        // Kontroller
         let controls;
         if (THREE.OrbitControls) {
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -130,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
             controls.update();
         }
 
-        // Mobil ve Ekran Boyutu Güncelleme Fonksiyonu
         function onWindowResize() {
             const width = container.clientWidth;
             const height = container.clientHeight;
@@ -142,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.addEventListener('resize', onWindowResize);
 
-        // Animasyon Döngüsü
         function animate() {
             requestAnimationFrame(animate);
             pill.rotation.y += 0.01;
@@ -154,13 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
         animate();
     }
 
-    // 5. İLETİŞİM FORMU KONTROLÜ (27 NİSAN GÖREVİ)
+    // 5. İLETİŞİM FORMU KONTROLÜ
     const form = document.getElementById('iletisimFormu');
 
     if(form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault(); 
-            // ... (İletişim formu doğrulama kodların aynı kaldı) ...
             const adSoyad = document.getElementById('adSoyad');
             const eposta = document.getElementById('eposta');
             const mesaj = document.getElementById('mesaj');
@@ -217,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 6. JSON VERİ ÇEKME VE FAVORİLERE EKLEME (FİNAL ÖDEVİ DİNAMİK VERİ MADDESİ)
+    // 6. JSON VERİ ÇEKME, ARAMA, FİLTRELEME VE FAVORİLER
     const productContainer = document.getElementById('product-container');
     const favoriteList = document.getElementById('favorite-list');
 
@@ -246,47 +239,99 @@ document.addEventListener('DOMContentLoaded', () => {
             renderFavorites();
         };
 
-        // Eğer HTML dosyası bilgisayarda direkt açılırsa (file://) bu kod hata verir.
-        // Düzgün çalışması için VS Code Live Server veya GitHub Pages kullanılmalıdır.
-        fetch('assests/js/data.json')
+        // Yol hatasını engelleyen dinamik prefix
+        const prefix = window.location.pathname.includes('/pages/') ? '../' : '';
+
+        fetch(prefix + 'assests/js/data.json')
             .then(response => {
                 if (!response.ok) throw new Error('Veri çekilemedi!');
                 return response.json();
             })
             .then(data => {
-                data.forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = 'feature-card product-card';
-                    // Kart tasarımını biraz daha şık ve JSON verilerine uygun hale getirdim
-                    card.innerHTML = `
-                        <img src="${product.resim || 'https://via.placeholder.com/150'}" alt="${product.isim}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
-                        <h3>${product.isim}</h3>
-                        <p style="color:#7f8c8d; font-size:0.9rem;">${product.kategori}</p>
-                        <p style="font-size:1.2rem; color:#2c3e50;"><strong>${product.fiyat} TL</strong></p>
-                        <button class="btn-primary btn-fav" style="margin-top: 15px; padding: 10px; width: 100%; border:none; cursor:pointer;">
-                            <i class="fa-solid fa-heart"></i> Favorilere Ekle
-                        </button>
-                    `;
+                let allProducts = data;
+                
+                // Kartları Ekrana Basan Fonksiyon
+                function displayProducts(productsToDisplay) {
+                    productContainer.innerHTML = '';
                     
-                    const favBtn = card.querySelector('.btn-fav');
-                    favBtn.addEventListener('click', () => {
-                        const isExist = favorites.some(fav => fav.id === product.id);
-                        if (!isExist) {
-                            favorites.push(product);
-                            localStorage.setItem('favoriteMeds', JSON.stringify(favorites));
-                            renderFavorites();
-                            alert(`${product.isim} favorilere eklendi!`);
+                    if (productsToDisplay.length === 0) {
+                        productContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #7f8c8d;">Aradığınız kriterde ürün bulunamadı.</p>';
+                        return;
+                    }
+
+                    productsToDisplay.forEach(product => {
+                        const card = document.createElement('div');
+                        card.className = 'feature-card product-card';
+                        card.innerHTML = `
+                            <img src="${prefix + (product.resim || 'https://via.placeholder.com/150')}" alt="${product.isim}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
+                            <h3>${product.isim}</h3>
+                            <p class="product-category" style="color:#7f8c8d; font-size:0.9rem;">${product.kategori}</p>
+                            <p style="font-size:1.2rem; color:#2c3e50;"><strong>${product.fiyat} TL</strong></p>
+                            <button class="btn-primary btn-fav" style="margin-top: 15px; padding: 10px; width: 100%; border:none; cursor:pointer;">
+                                <i class="fa-solid fa-heart"></i> Favorilere Ekle
+                            </button>
+                        `;
+                        
+                        const favBtn = card.querySelector('.btn-fav');
+                        favBtn.addEventListener('click', () => {
+                            const isExist = favorites.some(fav => fav.id === product.id);
+                            if (!isExist) {
+                                favorites.push(product);
+                                localStorage.setItem('favoriteMeds', JSON.stringify(favorites));
+                                renderFavorites();
+                                alert(`${product.isim} favorilere eklendi!`);
+                            } else {
+                                alert('Bu ürün zaten favorilerinizde!');
+                            }
+                        });
+    
+                        productContainer.appendChild(card);
+                    });
+                }
+
+                // Sayfa ilk açıldığında tüm veriyi göster
+                displayProducts(allProducts);
+
+                // --- ARAMA ÖZELLİĞİ ---
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('keyup', (e) => {
+                        const searchTerm = e.target.value.toLowerCase();
+                        const filteredProducts = allProducts.filter(product => 
+                            product.isim.toLowerCase().includes(searchTerm) || 
+                            product.kategori.toLowerCase().includes(searchTerm)
+                        );
+                        displayProducts(filteredProducts);
+                    });
+                }
+
+                // --- KATEGORİ FİLTRELEME ---
+                const filterBtns = document.querySelectorAll('.filter-btn');
+                filterBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        filterBtns.forEach(b => {
+                            b.classList.remove('active');
+                            b.style.background = 'transparent';
+                            b.style.color = '#3498db';
+                        });
+                        e.target.classList.add('active');
+                        e.target.style.background = '#3498db';
+                        e.target.style.color = 'white';
+
+                        const filterValue = e.target.getAttribute('data-filter');
+                        if (filterValue === 'all') {
+                            displayProducts(allProducts);
                         } else {
-                            alert('Bu ürün zaten favorilerinizde!');
+                            const filteredProducts = allProducts.filter(product => product.kategori === filterValue);
+                            displayProducts(filteredProducts);
                         }
                     });
-
-                    productContainer.appendChild(card);
                 });
+
             })
             .catch(error => {
                 console.error('Fetch Hatası:', error);
-                productContainer.innerHTML = `<p style="color:red; text-align:center;">Veriler yüklenemedi. Lütfen projeyi bir sunucu üzerinden (Live Server vb.) çalıştırın.</p>`;
+                productContainer.innerHTML = `<p style="color:red; text-align:center; grid-column: 1 / -1;">Veriler yüklenemedi. Lütfen projeyi bir sunucu üzerinden (Live Server vb.) çalıştırın.</p>`;
             });
 
         renderFavorites();
