@@ -1,36 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // HATA DÜZELTİLDİ: 'onst' yerine 'const' yazıldı.
-    const listelemeAlani = document.getElementById("ilac-listesi");
-
-    // Sadece ilac-listesi id'si olan sayfalarda çalışsın ki diğer sayfalarda hata vermesin
-    if (listelemeAlani) {
-        fetch("assests/js/data.json")
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(ilac => {
-                    // Her bir ilaç için yeni bir div oluşturuyoruz
-                    const kart = document.createElement("div");
-                    kart.className = "ilac-karti"; // CSS'te şekillendirmek için class verdik
-
-                    // Kartın içindeki HTML yapısı
-                    kart.innerHTML = `
-                        <div class="kart-resim">
-                            <img src="${ilac.resim}" alt="${ilac.isim}">
-                        </div>
-                        <div class="kart-icerik">
-                            <h3>${ilac.isim}</h3>
-                            <span class="kategori-etiketi">${ilac.kategori}</span>
-                            <p class="fiyat">${ilac.fiyat} TL</p>
-                            <button class="detay-butonu">İncele</button>
-                        </div>
-                    `;
-                    
-                    // Oluşturduğumuz kartı sayfadaki alana ekliyoruz
-                    listelemeAlani.appendChild(kart);
-                });
-            })
-            .catch(error => console.error("JSON verisi çekilirken hata oluştu:", error));
-    }
 
     // 1. HAMBURGER MENÜ
     const hamburger = document.querySelector(".hamburger");
@@ -162,18 +130,16 @@ document.addEventListener('DOMContentLoaded', () => {
             controls.update();
         }
 
-        // === KRİTİK: MOBİL VE EKRAN BOYUTU GÜNCELLEME FONKSİYONU ===
+        // Mobil ve Ekran Boyutu Güncelleme Fonksiyonu
         function onWindowResize() {
             const width = container.clientWidth;
             const height = container.clientHeight;
 
-            // Kamera oranını ve render boyutunu yeni ölçülere göre güncelle
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
             renderer.setSize(width, height);
         }
 
-        // Pencere boyutu değiştiğinde (veya telefon yan çevrildiğinde) çalıştır
         window.addEventListener('resize', onWindowResize);
 
         // Animasyon Döngüsü
@@ -194,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault(); 
+            // ... (İletişim formu doğrulama kodların aynı kaldı) ...
             const adSoyad = document.getElementById('adSoyad');
             const eposta = document.getElementById('eposta');
             const mesaj = document.getElementById('mesaj');
@@ -250,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 6. 4 MAYIS GÖREVİ: JSON VERİ ÇEKME VE FAVORİLERE EKLEME
+    // 6. JSON VERİ ÇEKME VE FAVORİLERE EKLEME (FİNAL ÖDEVİ DİNAMİK VERİ MADDESİ)
     const productContainer = document.getElementById('product-container');
     const favoriteList = document.getElementById('favorite-list');
 
@@ -266,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const li = document.createElement('li');
                 li.className = 'med-item';
                 li.innerHTML = `
-                    <span><strong>${fav.isim}</strong> - ${fav.kategori} (${fav.fiyat})</span>
+                    <span><strong>${fav.isim}</strong> - ${fav.kategori} (${fav.fiyat} TL)</span>
                     <button class="delete-btn" onclick="removeFavorite(${index})">Kaldır</button>
                 `;
                 favoriteList.appendChild(li);
@@ -279,7 +246,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderFavorites();
         };
 
-        // DİKKAT: Fetch yolu dosya yapına göre ayarlandı
+        // Eğer HTML dosyası bilgisayarda direkt açılırsa (file://) bu kod hata verir.
+        // Düzgün çalışması için VS Code Live Server veya GitHub Pages kullanılmalıdır.
         fetch('assests/js/data.json')
             .then(response => {
                 if (!response.ok) throw new Error('Veri çekilemedi!');
@@ -289,11 +257,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'feature-card product-card';
+                    // Kart tasarımını biraz daha şık ve JSON verilerine uygun hale getirdim
                     card.innerHTML = `
-                        <i class="fa-solid fa-capsules" style="font-size: 2rem; color: #3498db; margin-bottom: 15px;"></i>
+                        <img src="${product.resim || 'https://via.placeholder.com/150'}" alt="${product.isim}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
                         <h3>${product.isim}</h3>
-                        <p>${product.kategori}</p>
-                        <p><strong>${product.fiyat}</strong></p>
+                        <p style="color:#7f8c8d; font-size:0.9rem;">${product.kategori}</p>
+                        <p style="font-size:1.2rem; color:#2c3e50;"><strong>${product.fiyat} TL</strong></p>
                         <button class="btn-primary btn-fav" style="margin-top: 15px; padding: 10px; width: 100%; border:none; cursor:pointer;">
                             <i class="fa-solid fa-heart"></i> Favorilere Ekle
                         </button>
@@ -315,7 +284,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     productContainer.appendChild(card);
                 });
             })
-            .catch(error => console.error('Fetch Hatası:', error));
+            .catch(error => {
+                console.error('Fetch Hatası:', error);
+                productContainer.innerHTML = `<p style="color:red; text-align:center;">Veriler yüklenemedi. Lütfen projeyi bir sunucu üzerinden (Live Server vb.) çalıştırın.</p>`;
+            });
 
         renderFavorites();
     }
@@ -333,7 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const tipElement = document.getElementById('daily-tip');
     if (tipElement) {
-        // Rastgele bir ipucu seç
         const randomIndex = Math.floor(Math.random() * tips.length);
         tipElement.textContent = tips[randomIndex];
     }
