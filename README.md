@@ -1,3 +1,14 @@
+# Hap ve Zaman tasarufu 
+# artık daha gelişmiş 
+# web_portfolio_template
+# web projesi yönetimi dersi
+# bu uygulama ile hasta kişiler ilaçlarını unutmadan karıştırmadan hatırlayacak ve aksatmayacak
+# gmail kontrolü yapıldı ve kullanıcı girişi hazır
+# localstorage ile veri tutuldu
+# final ödev = Kullanıcı Deneyimi Özellikleri
+# API veya Dinamik Veri Kullanımı
+# Veritabanı İşlemleri
+# Projeyi Profesyonelleştirme
 # 💊 MediHatırlat - İlaç Takip ve Hatırlatma Uygulaması
 
 **MediHatırlat**, kullanıcıların günlük ilaç kullanımlarını düzenli bir şekilde takip edebilmeleri, zamanı geldiğinde bildirim alabilmeleri ve sağlıklı yaşam takviyelerini inceleyip favorilerine ekleyebilmeleri için tasarlanmış modern, etkileşimli ve tamamen mobil uyumlu bir web projesidir.
