@@ -1,5 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+    onst listelemeAlani = document.getElementById("ilac-listesi");
+
+    // Sadece ilac-listesi id'si olan sayfalarda çalışsın ki diğer sayfalarda hata vermesin
+    if (listelemeAlani) {
+        fetch("assests/js/data.json")
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(ilac => {
+                    // Her bir ilaç için yeni bir div oluşturuyoruz
+                    const kart = document.createElement("div");
+                    kart.className = "ilac-karti"; // CSS'te şekillendirmek için class verdik
+
+                    // Kartın içindeki HTML yapısı
+                    kart.innerHTML = `
+                        <div class="kart-resim">
+                            <img src="${ilac.resim}" alt="${ilac.isim}">
+                        </div>
+                        <div class="kart-icerik">
+                            <h3>${ilac.isim}</h3>
+                            <span class="kategori-etiketi">${ilac.kategori}</span>
+                            <p class="fiyat">${ilac.fiyat} TL</p>
+                            <button class="detay-butonu">İncele</button>
+                        </div>
+                    `;
+                    
+                    // Oluşturduğumuz kartı sayfadaki alana ekliyoruz
+                    listelemeAlani.appendChild(kart);
+                });
+            })
+            .catch(error => console.error("JSON verisi çekilirken hata oluştu:", error));
+    }
+});
     // 1. HAMBURGER MENÜ
     const hamburger = document.querySelector(".hamburger");
     const navMenu = document.querySelector(".nav-menu");
