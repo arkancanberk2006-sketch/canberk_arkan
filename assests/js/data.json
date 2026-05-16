@@ -3,24 +3,42 @@
     "id": 1,
     "isim": "C Vitamini 1000mg",
     "kategori": "Bağışıklık Takviyesi",
-    "fiyat": "120 TL"
+    "fiyat": 120,
+    "resim": "assests/img/vitamin_c.jpg"
   },
   {
     "id": 2,
     "isim": "Omega 3 Balık Yağı",
     "kategori": "Kalp & Damar Sağlığı",
-    "fiyat": "250 TL"
+    "fiyat": 250,
+    "resim": "assests/img/omega3.jpg"
   },
   {
     "id": 3,
     "isim": "D3 + K2 Vitamini",
     "kategori": "Kemik Sağlığı",
-    "fiyat": "180 TL"
+    "fiyat": 180,
+    "resim": "assests/img/d3k2.jpg"
   },
   {
     "id": 4,
     "isim": "Magnezyum Sitrat",
     "kategori": "Kas & Sinir Sistemi",
-    "fiyat": "210 TL"
+    "fiyat": 210,
+    "resim": "assests/img/magnezyum.jpg"
+  },
+  {
+    "id": 5,
+    "isim": "Parol 500mg",
+    "kategori": "Ağrı Kesici",
+    "fiyat": 35,
+    "resim": "assests/img/hap1.jpg"
+  },
+  {
+    "id": 6,
+    "isim": "Augmentin 1000mg",
+    "kategori": "Antibiyotik",
+    "fiyat": 120,
+    "resim": "assests/img/hap2.jpg"
   }
 ]
