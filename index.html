@@ -114,34 +114,8 @@
         </div>
         ```
 
-### 2. Adım: JavaScript ile Arama ve Filtreyi Çalıştırmak
-Şimdi arama kutusuna yazılan kelimeyi okuyup kartları süzmesi için `main.js` dosyasını güncellemeliyiz.
-
-`main.js` dosyanı aç ve **`// 6. JSON VERİ ÇEKME VE FAVORİLERE EKLEME`** yazan yorum satırının altındaki fetch kodunu aşağıdakiyle **değiştir**. *(Tüm JS dosyasını vermiyorum, sadece fetch kısmını güncelliyoruz)*:
-
-```javascript
-        // DİKKAT: Fetch yolu dosya yapına göre ayarlandı
-        fetch('assests/js/data.json')
-            .then(response => {
-                if (!response.ok) throw new Error('Veri çekilemedi!');
-                return response.json();
-            })
-            .then(data => {
-                let allProducts = data; // Tüm veriyi bir değişkende tutalım
-                
-                // Kartları Ekrana Basan Fonksiyon
-                function displayProducts(productsToDisplay) {
-                    productContainer.innerHTML = ''; // Önce ekranı temizle
-                    
-                    if (productsToDisplay.length === 0) {
-                        productContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #7f8c8d;">Aradığınız kriterde ürün bulunamadı.</p>';
-                        return;
-                    }
-
-                    productsToDisplay.forEach(product => {
-                        const card = document.createElement('div');
-                        card.className = 'feature-card product-card';
-                        card.innerHTML = `
+'<p style="grid-column: 1 / -1; text-align: center; color: #7f8c8d;">Aradığınız kriterde ürün bulunamadı.</p>';
+                      
                             <img src="${product.resim || 'https://via.placeholder.com/150'}" alt="${product.isim}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
                             <h3>${product.isim}</h3>
                             <p class="product-category" style="color:#7f8c8d; font-size:0.9rem;">${product.kategori}</p>
