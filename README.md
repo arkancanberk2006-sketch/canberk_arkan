@@ -73,3 +73,6 @@ proje-klasoru/
 │       └── main.js       # Tüm projenin beyni (mantık, filtre, 3d, fetch)
 │
 └── README.md             # Proje açıklama dosyası
+
+
+
