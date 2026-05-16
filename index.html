@@ -101,7 +101,119 @@
                     <h2>Tavsiye Edilen Takviyeler</h2>
                     <p>Sık kullanılan ürünleri inceleyin ve favorilerinize ekleyin.</p>
                 </div>
+                <div class="filter-section" style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+            
+            <input type="text" id="searchInput" placeholder="İlaç veya takviye ara..." style="width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 1px solid #ccc;">
+            
+            <div class="category-buttons" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                <button class="filter-btn active" data-filter="all" style="padding: 8px 16px; border-radius: 20px; border: none; background: #3498db; color: white; cursor: pointer;">Tümü</button>
+                <button class="filter-btn" data-filter="Ağrı Kesici" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #3498db; background: transparent; color: #3498db; cursor: pointer;">Ağrı Kesici</button>
+                <button class="filter-btn" data-filter="Bağışıklık Takviyesi" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #3498db; background: transparent; color: #3498db; cursor: pointer;">Bağışıklık</button>
+                <button class="filter-btn" data-filter="Kemik Sağlığı" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #3498db; background: transparent; color: #3498db; cursor: pointer;">Kemik Sağlığı</button>
+            </div>
+        </div>
+        ```
+
+### 2. Adım: JavaScript ile Arama ve Filtreyi Çalıştırmak
+Şimdi arama kutusuna yazılan kelimeyi okuyup kartları süzmesi için `main.js` dosyasını güncellemeliyiz.
+
+`main.js` dosyanı aç ve **`// 6. JSON VERİ ÇEKME VE FAVORİLERE EKLEME`** yazan yorum satırının altındaki fetch kodunu aşağıdakiyle **değiştir**. *(Tüm JS dosyasını vermiyorum, sadece fetch kısmını güncelliyoruz)*:
+
+```javascript
+        // DİKKAT: Fetch yolu dosya yapına göre ayarlandı
+        fetch('assests/js/data.json')
+            .then(response => {
+                if (!response.ok) throw new Error('Veri çekilemedi!');
+                return response.json();
+            })
+            .then(data => {
+                let allProducts = data; // Tüm veriyi bir değişkende tutalım
                 
+                // Kartları Ekrana Basan Fonksiyon
+                function displayProducts(productsToDisplay) {
+                    productContainer.innerHTML = ''; // Önce ekranı temizle
+                    
+                    if (productsToDisplay.length === 0) {
+                        productContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #7f8c8d;">Aradığınız kriterde ürün bulunamadı.</p>';
+                        return;
+                    }
+
+                    productsToDisplay.forEach(product => {
+                        const card = document.createElement('div');
+                        card.className = 'feature-card product-card';
+                        card.innerHTML = `
+                            <img src="${product.resim || 'https://via.placeholder.com/150'}" alt="${product.isim}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
+                            <h3>${product.isim}</h3>
+                            <p class="product-category" style="color:#7f8c8d; font-size:0.9rem;">${product.kategori}</p>
+                            <p style="font-size:1.2rem; color:#2c3e50;"><strong>${product.fiyat} TL</strong></p>
+                            <button class="btn-primary btn-fav" style="margin-top: 15px; padding: 10px; width: 100%; border:none; cursor:pointer;">
+                                <i class="fa-solid fa-heart"></i> Favorilere Ekle
+                            </button>
+                        `;
+                        
+                        const favBtn = card.querySelector('.btn-fav');
+                        favBtn.addEventListener('click', () => {
+                            const isExist = favorites.some(fav => fav.id === product.id);
+                            if (!isExist) {
+                                favorites.push(product);
+                                localStorage.setItem('favoriteMeds', JSON.stringify(favorites));
+                                renderFavorites();
+                                alert(`${product.isim} favorilere eklendi!`);
+                            } else {
+                                alert('Bu ürün zaten favorilerinizde!');
+                            }
+                        });
+    
+                        productContainer.appendChild(card);
+                    });
+                }
+
+                // Sayfa ilk açıldığında tüm veriyi göster
+                displayProducts(allProducts);
+
+                // --- ARAMA ÖZELLİĞİ (Ödev Madde 1) ---
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('keyup', (e) => {
+                        const searchTerm = e.target.value.toLowerCase();
+                        const filteredProducts = allProducts.filter(product => 
+                            product.isim.toLowerCase().includes(searchTerm) || 
+                            product.kategori.toLowerCase().includes(searchTerm)
+                        );
+                        displayProducts(filteredProducts);
+                    });
+                }
+
+                // --- KATEGORİ FİLTRELEME (Ödev Madde 1) ---
+                const filterBtns = document.querySelectorAll('.filter-btn');
+                filterBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        // Buton renklerini ayarla
+                        filterBtns.forEach(b => {
+                            b.classList.remove('active');
+                            b.style.background = 'transparent';
+                            b.style.color = '#3498db';
+                        });
+                        e.target.classList.add('active');
+                        e.target.style.background = '#3498db';
+                        e.target.style.color = 'white';
+
+                        // Veriyi filtrele
+                        const filterValue = e.target.getAttribute('data-filter');
+                        if (filterValue === 'all') {
+                            displayProducts(allProducts);
+                        } else {
+                            const filteredProducts = allProducts.filter(product => product.kategori === filterValue);
+                            displayProducts(filteredProducts);
+                        }
+                    });
+                });
+
+            })
+            .catch(error => {
+                console.error('Fetch Hatası:', error);
+                productContainer.innerHTML = `<p style="color:red; text-align:center; grid-column: 1 / -1;">Veriler yüklenemedi. Lütfen projeyi bir sunucu üzerinden (Live Server vb.) çalıştırın.</p>`;
+            });
                 <div id="product-container" class="product-grid">
                     </div>
 
