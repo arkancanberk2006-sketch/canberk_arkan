@@ -74,3 +74,5 @@ proje-klasoru/
 │
 └── README.md             # Proje açıklama dosyası
 
+
+
