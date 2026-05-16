@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    onst listelemeAlani = document.getElementById("ilac-listesi");
+    // HATA DÜZELTİLDİ: 'onst' yerine 'const' yazıldı.
+    const listelemeAlani = document.getElementById("ilac-listesi");
 
     // Sadece ilac-listesi id'si olan sayfalarda çalışsın ki diğer sayfalarda hata vermesin
     if (listelemeAlani) {
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => console.error("JSON verisi çekilirken hata oluştu:", error));
     }
-});
+
     // 1. HAMBURGER MENÜ
     const hamburger = document.querySelector(".hamburger");
     const navMenu = document.querySelector(".nav-menu");
