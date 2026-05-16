@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="assests/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
     
@@ -16,14 +16,14 @@
         <a href="index.html" class="logo"><i class="fa-solid fa-pills"></i> MediHatırlat</a>
         
         <nav class="navbar">
-    <ul class="nav-menu">
-        <li class="nav-item"><a href="index.html" class="nav-link active">Ana Sayfa</a></li>
-        <li class="nav-item"><a href="#app-section" class="nav-link">Uygulama</a></li>
-        <li class="nav-item"><a href="pages/contact.html" class="nav-link">İletişim Detayları</a></li>
-        <li class="nav-item"><a href="pages/project.html" class="nav-link">Proje Detayları</a></li>
-        <li class="nav-item"><a href="pages/about.html" class="nav-link">Hakkımızda</a></li>
-    </ul>
-</nav>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link active">Ana Sayfa</a></li>
+                <li class="nav-item"><a href="#app-section" class="nav-link">Uygulama</a></li>
+                <li class="nav-item"><a href="pages/contact.html" class="nav-link">İletişim Detayları</a></li>
+                <li class="nav-item"><a href="pages/project.html" class="nav-link">Proje Detayları</a></li>
+                <li class="nav-item"><a href="pages/about.html" class="nav-link">Hakkımızda</a></li>
+            </ul>
+        </nav>
         
         <button id="dark-mode-toggle" class="theme-btn" title="Karanlık/Aydınlık Mod">
             <i class="fa-solid fa-moon"></i>
@@ -89,7 +89,7 @@
                     <h2>Bugünkü İlaçlarım</h2>
                     <div class="med-list-container">
                         <ul id="med-list">
-                            </ul>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -101,118 +101,43 @@
                     <h2>Tavsiye Edilen Takviyeler</h2>
                     <p>Sık kullanılan ürünleri inceleyin ve favorilerinize ekleyin.</p>
                 </div>
+                
                 <div class="filter-section" style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-            
-            <input type="text" id="searchInput" placeholder="İlaç veya takviye ara..." style="width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 1px solid #ccc;">
-            
-            <div class="category-buttons" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                <button class="filter-btn active" data-filter="all" style="padding: 8px 16px; border-radius: 20px; border: none; background: #3498db; color: white; cursor: pointer;">Tümü</button>
-                <button class="filter-btn" data-filter="Ağrı Kesici" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #3498db; background: transparent; color: #3498db; cursor: pointer;">Ağrı Kesici</button>
-                <button class="filter-btn" data-filter="Bağışıklık Takviyesi" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #3498db; background: transparent; color: #3498db; cursor: pointer;">Bağışıklık</button>
-                <button class="filter-btn" data-filter="Kemik Sağlığı" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #3498db; background: transparent; color: #3498db; cursor: pointer;">Kemik Sağlığı</button>
-            </div>
-        </div>
-        ```
-
-'<p style="grid-column: 1 / -1; text-align: center; color: #7f8c8d;">Aradığınız kriterde ürün bulunamadı.</p>';
-                      
-                            <img src="${product.resim || 'https://via.placeholder.com/150'}" alt="${product.isim}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
-                            <h3>${product.isim}</h3>
-                            <p class="product-category" style="color:#7f8c8d; font-size:0.9rem;">${product.kategori}</p>
-                            <p style="font-size:1.2rem; color:#2c3e50;"><strong>${product.fiyat} TL</strong></p>
-                            <button class="btn-primary btn-fav" style="margin-top: 15px; padding: 10px; width: 100%; border:none; cursor:pointer;">
-                                <i class="fa-solid fa-heart"></i> Favorilere Ekle
-                            </button>
-                        `;
-                        
-                        const favBtn = card.querySelector('.btn-fav');
-                        favBtn.addEventListener('click', () => {
-                            const isExist = favorites.some(fav => fav.id === product.id);
-                            if (!isExist) {
-                                favorites.push(product);
-                                localStorage.setItem('favoriteMeds', JSON.stringify(favorites));
-                                renderFavorites();
-                                alert(`${product.isim} favorilere eklendi!`);
-                            } else {
-                                alert('Bu ürün zaten favorilerinizde!');
-                            }
-                        });
-    
-                        productContainer.appendChild(card);
-                    });
-                }
-
-                // Sayfa ilk açıldığında tüm veriyi göster
-                displayProducts(allProducts);
-
-                // --- ARAMA ÖZELLİĞİ (Ödev Madde 1) ---
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput) {
-                    searchInput.addEventListener('keyup', (e) => {
-                        const searchTerm = e.target.value.toLowerCase();
-                        const filteredProducts = allProducts.filter(product => 
-                            product.isim.toLowerCase().includes(searchTerm) || 
-                            product.kategori.toLowerCase().includes(searchTerm)
-                        );
-                        displayProducts(filteredProducts);
-                    });
-                }
-
-                // --- KATEGORİ FİLTRELEME (Ödev Madde 1) ---
-                const filterBtns = document.querySelectorAll('.filter-btn');
-                filterBtns.forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        // Buton renklerini ayarla
-                        filterBtns.forEach(b => {
-                            b.classList.remove('active');
-                            b.style.background = 'transparent';
-                            b.style.color = '#3498db';
-                        });
-                        e.target.classList.add('active');
-                        e.target.style.background = '#3498db';
-                        e.target.style.color = 'white';
-
-                        // Veriyi filtrele
-                        const filterValue = e.target.getAttribute('data-filter');
-                        if (filterValue === 'all') {
-                            displayProducts(allProducts);
-                        } else {
-                            const filteredProducts = allProducts.filter(product => product.kategori === filterValue);
-                            displayProducts(filteredProducts);
-                        }
-                    });
-                });
-
-            })
-            .catch(error => {
-                console.error('Fetch Hatası:', error);
-                productContainer.innerHTML = `<p style="color:red; text-align:center; grid-column: 1 / -1;">Veriler yüklenemedi. Lütfen projeyi bir sunucu üzerinden (Live Server vb.) çalıştırın.</p>`;
-            });
-                <div id="product-container" class="product-grid">
+                    <input type="text" id="searchInput" placeholder="İlaç veya takviye ara..." style="width: 100%; max-width: 400px; padding: 12px; border-radius: 8px; border: 1px solid #ccc;">
+                    <div class="category-buttons" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                        <button class="filter-btn active" data-filter="all" style="padding: 8px 16px; border-radius: 20px; border: none; background: #3498db; color: white; cursor: pointer;">Tümü</button>
+                        <button class="filter-btn" data-filter="Ağrı Kesici" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #3498db; background: transparent; color: #3498db; cursor: pointer;">Ağrı Kesici</button>
+                        <button class="filter-btn" data-filter="Bağışıklık Takviyesi" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #3498db; background: transparent; color: #3498db; cursor: pointer;">Bağışıklık</button>
+                        <button class="filter-btn" data-filter="Kemik Sağlığı" style="padding: 8px 16px; border-radius: 20px; border: 1px solid #3498db; background: transparent; color: #3498db; cursor: pointer;">Kemik Sağlığı</button>
                     </div>
+                </div>
+
+                <div id="product-container" class="product-grid">
+                </div>
 
                 <div class="favorites-wrapper" style="margin-top: 3rem;">
                     <h3><i class="fa-solid fa-star" style="color: gold;"></i> Favori Listem</h3>
                     <ul id="favorite-list" class="med-list-container">
-                        </ul>
+                    </ul>
                 </div>
             </div>
         </section>
-<div id="ilac-listesi" class="kart-kapsayici"></div>
+
     </main>
+
     <section class="tip-section">
-    <div class="tip-container">
-        <div class="tip-card">
-            <div class="tip-icon">
-                <i class="fa-solid fa-lightbulb"></i>
-            </div>
-            <div class="tip-content">
-                <h4>Günün Sağlık İpucu</h4>
-                <p id="daily-tip">Yükleniyor...</p>
+        <div class="tip-container">
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div class="tip-content">
+                    <h4>Günün Sağlık İpucu</h4>
+                    <p id="daily-tip">Yükleniyor...</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <footer class="footer">
         <p>&copy; 2026 MediHatırlat. Tüm hakları saklıdır.</p>
